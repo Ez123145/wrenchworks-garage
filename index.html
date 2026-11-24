@@ -1941,7 +1941,7 @@ function buildTools(){
  wwRenderToolDrawers();
 }
 function startGame(i){if(E){E=false;cash=bank.cash;xp=bank.xp;$('#rc').style.display='none'}D=DIFFS[i];if(!started){cash=600;xp=0;started=true}showL=D.lab===2;buildTools();$('#plh').style.display=$('#pl').style.display=D.list?'':'none';$('#lb').style.display=D.lab?'':'none';$('#lb').classList.toggle('on',showL);$('#lv').textContent=D.n;$('#start').style.display='none';load(-1); /* The career menu already selected the contract; do not reopen the board here. */}
-function showStart(){$('#modal').classList.remove('show');const st=$('#start');st.style.display='flex';st.innerHTML='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V37</small></h1><div class="mu" style="margin-bottom:14px">Select difficulty tier to begin:</div>'+DIFFS.map((d,i)=>'<button class="card-select" data-d="'+i+'"><b>'+(i+1)+'. '+d.n+'</b><span>'+d.d+'</span><i>'+availTools(d).length+' tools · '+d.pool.length+' jobs · pay ×'+d.pm+'</i></button>').join('')+'<button class="card-select" data-d="x"><b>Sandbox Mode</b><span>Free play with sandbox inventory. Garage upgrades, including the two-post lift, still require purchase.</span><i>'+availTools(EXPD).length+' available tools · sandbox</i></button>'+(started?'<button class="card-select rs" data-d="r">Reset saved progress</button>':'');}
+function showStart(){$('#modal').classList.remove('show');const st=$('#start');st.style.display='flex';st.innerHTML='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V38</small></h1><div class="mu" style="margin-bottom:14px">Select difficulty tier to begin:</div>'+DIFFS.map((d,i)=>'<button class="card-select" data-d="'+i+'"><b>'+(i+1)+'. '+d.n+'</b><span>'+d.d+'</span><i>'+availTools(d).length+' tools · '+d.pool.length+' jobs · pay ×'+d.pm+'</i></button>').join('')+'<button class="card-select" data-d="x"><b>Sandbox Mode</b><span>Free play with sandbox inventory. Garage upgrades, including the two-post lift, still require purchase.</span><i>'+availTools(EXPD).length+' available tools · sandbox</i></button>'+(started?'<button class="card-select rs" data-d="r">Reset saved progress</button>':'');}
 
 $('#start').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.d===undefined)return;if(b.dataset.d==='r'){if(confirm('Erase saved cash, XP, upgrades and badges?')){try{localStorage.removeItem('wwg1');localStorage.removeItem('wwg-scrap-v67')}catch(x){}location.reload()}}else if(b.dataset.d==='x'){startExp()}else{const tier=Number(b.dataset.d);if(Number.isInteger(tier)&&DIFFS[tier])startGame(tier);}});
 $('#pl').innerHTML=Object.keys(parts).filter(n=>n!=='2-Post Lift'&&n!=='2-Post Hydraulic Lift').sort((a,b)=>{const order=['Hood','Battery','Positive terminal','Negative terminal'];const ai=order.indexOf(a),bi=order.indexOf(b);return (ai<0?999:ai)-(bi<0?999:bi)||a.localeCompare(b)}).map(n=>'<button data-n="'+n+'">'+n+'</button>').join('');
@@ -3009,7 +3009,7 @@ function wwSettingsModal(){
 
 let wwClassChosenThisVisit=false, wwJobChosenThisVisit=false;
 function wwMenu(){ $('#modal').classList.remove('show'); const st=$('#start'); st.style.display='flex'; const step=WW_MERGE.step;
- const head='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V37</small></h1><div style="color:var(--mu);margin:6px 0 16px">CAREER GARAGE · BALANCED REALISM</div><div style="display:flex;gap:8px;margin-bottom:18px">'+[1,2].map(n=>'<button class="'+(step===n?'on':'')+'" data-step="'+n+'">STEP '+n+'</button>').join('')+'</div>';
+ const head='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V38</small></h1><div style="color:var(--mu);margin:6px 0 16px">CAREER GARAGE · BALANCED REALISM</div><div style="display:flex;gap:8px;margin-bottom:18px">'+[1,2].map(n=>'<button class="'+(step===n?'on':'')+'" data-step="'+n+'">STEP '+n+'</button>').join('')+'</div>';
  let body='';
  if(step===1){body=(WW_MERGE.levelCompletionNotice?'<div class="row-card" style="border:2px solid var(--ac);margin-bottom:14px;background:rgba(255,180,50,.09)"><div><b>LEVEL COMPLETED: '+WW_MERGE.levelCompletionNotice.completed+'</b><span class="mu">You completed every job in this mechanic level.</span>'+(WW_MERGE.levelCompletionNotice.next?'<span class="mu" style="display:block;color:var(--ac);font-weight:800;margin-top:5px">NEXT LEVEL UNLOCKED: '+WW_MERGE.levelCompletionNotice.next+'</span>':'<span class="mu" style="display:block;color:var(--ac);font-weight:800;margin-top:5px">ALL CAREER LEVELS COMPLETED</span>')+'</div></div>':'')+'<h2 style="margin:0 0 12px">1. Choose your mechanic class</h2>'+WW_CLASSES.slice(0,5).map((n,i)=>{const locked=!wwClassUnlocked(i);return '<button class="card-select" data-class="'+i+'" '+(locked?'disabled':'')+' style="opacity:'+(locked?'.5':'1')+';border-color:'+(wwClassChosenThisVisit&&WW_MERGE.cls===i?'var(--ac)':'var(--bd)')+'"><b>'+n+'</b><span>'+(i===0?'Begin with basic battery, tire, oil-service and inspection contracts.':i===1?'A separate set of cooling, brake and wheel-end service jobs.':i===2?'New charging, ignition, starter and engine-performance diagnosis jobs.':i===3?'Advanced transmission, steering and cooling-system diagnosis contracts.':'The toughest specialist diagnostics: engine condition, fuel delivery, electrical systems and transmission performance.')+'</span><i>'+(locked?'LOCKED · COMPLETE EVERY '+WW_CLASSES[i-1].toUpperCase()+' JOB FIRST':'CAREER RANK '+(i+1)+' · '+DIFFS[i].pool.length+' CONTRACTS · UNLOCKED')+'</i></button>';}).join('')+'<div class="row-card"><div><b>Reference vehicle</b><span class="mu">2001 Ford Ranger · This is the vehicle currently modeled in the garage.</span></div></div>'+'<button class="card-select" data-sandbox-select><b>🧰 Sandbox Mode</b><span>Play however you want: the free garage and your build, any repair job, and Street Tuner drag racing and car shows. Nothing here changes your career save.</span><i>FREE GARAGE & BUILDS · PICK A JOB · STREET TUNER</i></button>'
  } else if(WW_MERGE.cls===5){body='<h2 style="margin:0 0 12px">2. Enter Sandbox</h2><div class="mu" style="margin-bottom:12px">Free practice has no customer contract and gives you an unrestricted workbench. Parts inventory is unlimited in this mode. Permanent garage equipment is separate: the two-post lift, LED floodlights and deluxe tool chest still have to be purchased with saved Career garage funds.</div><button class="card-select" data-sandbox><b>ENTER EXPERIMENT / SANDBOX</b><span>Start free practice in the garage. An unpurchased two-post lift remains hidden and locked.</span><i>NO JOB ACTIVE · FREE PRACTICE</i></button>';
@@ -8033,7 +8033,7 @@ function drawCar(ctx,build,o){
  if(o.pitch){ctx.translate(B.wx[0],B.sill);ctx.rotate(o.pitch);ctx.translate(-B.wx[0],-B.sill);}
  // wheel wells (drawn as dark area behind the body color)
  const archR=Math.max(r0*1.12,r*1.04);
- drawBody(ctx,B,build,st,col,p,t,archR,bodyUp,wheelY);
+ HOOD_OPEN=!!o.hoodOpen;drawBody(ctx,B,build,st,col,p,t,archR,bodyUp,wheelY);
  if(o.hoodOpen)drawEngineBay(ctx,B,build,t);
  if(build.dirt>.05){ctx.save();polyPath(ctx,B.pts);ctx.clip();const dg=ctx.createLinearGradient(0,B.sill,0,B.sill+16);dg.addColorStop(0,'rgba(96,74,46,'+Math.min(.75,build.dirt*.8)+')');dg.addColorStop(1,'rgba(96,74,46,0)');ctx.fillStyle=dg;ctx.fillRect(-5,B.sill-2,110,20);const dr=rng(7);ctx.fillStyle='rgba(80,62,40,'+Math.min(.6,build.dirt*.7)+')';for(let i=0;i<build.dirt*60;i++)ctx.fillRect(dr()*100,B.sill+dr()*dr()*14,.6+dr(),.5+dr()*.6);ctx.restore();}
  if(o.driver&&B.win.length>3){const xs=B.win.map(q=>q[0]),ys=B.win.map(q=>q[1]);const lo=Math.min(...ys),hi=Math.max(...ys);const hx=Math.min(...xs)+(Math.max(...xs)-Math.min(...xs))*(B.truck?.55:.5),hy=lo+(hi-lo)*.42,hr=(hi-lo)*.3;
@@ -8057,10 +8057,11 @@ function bodyGrad(ctx,col,p,t,top,bottom){
 // Top edge of the body outline at body-x (0..100), used to place things on the hood.
 function topAt(B,x){let best=B.sill;const P=B.pts;for(let i=0;i<P.length;i++){const a=P[i],b=P[(i+1)%P.length];if((a[0]-x)*(b[0]-x)<=0&&a[0]!==b[0]){const y=a[1]+(b[1]-a[1])*(x-a[0])/(b[0]-a[0]);if(y>best)best=y;}}return best;}
 // Hood up: the engine bay with the parts you actually bought.
-function drawEngineBay(ctx,B,build,t){const h0=B.hood[0]+1,h1=B.hood[1]-2,ev=CARS[build.car].ev;const top=topAt(B,(h0+h1)/2),fl=B.sill+6;const P=k=>(build.parts[k]||'stock');
- const bay=ctx.createLinearGradient(0,fl,0,top);bay.addColorStop(0,'#0b0d10');bay.addColorStop(1,'#1d232b');ctx.fillStyle=bay;ctx.beginPath();ctx.moveTo(h0,fl);ctx.lineTo(h1,fl);ctx.lineTo(h1,topAt(B,h1)-.3);ctx.lineTo(h0,topAt(B,h0)-.3);ctx.closePath();ctx.fill();
- const W=h1-h0,cx=h0+W*.48,eb=fl+1.2,eh=Math.min(top-fl+2,11);
- if(ev){ctx.fillStyle='#2b3440';ctx.fillRect(cx-W*.3,eb,W*.6,eh*.75);ctx.fillStyle='#2bd9ff';ctx.fillRect(cx-W*.26,eb+eh*.55,W*.52,.7);ctx.fillStyle='#ffd02b';ctx.font='bold 3px Arial';ctx.save();ctx.scale(1,-1);ctx.fillText('⚡ '+(P('motor')==='stock'?'MOTOR':'DUAL MOTOR'),cx-W*.22,-(eb+eh*.3));ctx.restore();}
+function drawEngineBay(ctx,B,build,t){const cab=B.hood[1]-B.hood[0]<10;const h0=cab?B.wx[1]-40:B.hood[0]+1,h1=cab?B.wx[1]-15:B.hood[1]-2,ev=CARS[build.car].ev;const TA=x=>cab?B.sill+12:topAt(B,x);const top=TA((h0+h1)/2),fl=B.sill+(cab?3:6);const P=k=>(build.parts[k]||'stock');
+ ctx.save();ctx.beginPath();ctx.rect(h0-1,fl-3,h1-h0+2.6,top-fl+12);ctx.clip();
+ const bay=ctx.createLinearGradient(0,fl,0,top);bay.addColorStop(0,'#0b0d10');bay.addColorStop(1,'#1d232b');ctx.fillStyle=bay;ctx.beginPath();ctx.moveTo(h0,fl);ctx.lineTo(h1,fl);ctx.lineTo(h1,TA(h1)-.3);ctx.lineTo(h0,TA(h0)-.3);ctx.closePath();ctx.fill();
+ const W=h1-h0,cx=h0+W*.48,eb=fl+1.2,eh=Math.min(top-fl,11);
+ if(ev){ctx.fillStyle='#2b3440';ctx.fillRect(cx-W*.3,eb,W*.6,eh*.75);ctx.fillStyle='#2bd9ff';ctx.fillRect(cx-W*.26,eb+eh*.55,W*.52,.7);ctx.fillStyle='#ffd02b';ctx.font='bold 2px Arial';ctx.textAlign='center';ctx.save();ctx.scale(1,-1);ctx.fillText('⚡ '+(P('motor')==='stock'?'DUAL MOTOR':'TRI MOTOR'),cx,-(eb+eh*.3));ctx.restore();ctx.textAlign='left';}
  else{ // block, valve cover, intake
   ctx.fillStyle='#4a525c';ctx.fillRect(cx-W*.26,eb,W*.52,eh*.6);ctx.fillStyle=P('tune')!=='stock'||P('heads')!=='stock'?'#c8262b':'#7b8590';ctx.fillRect(cx-W*.24,eb+eh*.6,W*.48,eh*.18);
   ctx.fillStyle='rgba(255,255,255,.25)';ctx.fillRect(cx-W*.24,eb+eh*.74,W*.48,.4);
@@ -8071,12 +8072,14 @@ function drawEngineBay(ctx,B,build,t){const h0=B.hood[0]+1,h1=B.hood[1]-2,ev=CAR
   else{ctx.fillStyle='#22272e';ctx.fillRect(fx-2,eb+eh*.5,4,eh*.35);}
   // turbos
   const tb=P('power');if(tb==='turbo1'||tb==='turbo2'||tb==='twin'){const n=tb==='twin'?2:1,r=tb==='turbo1'?1.7:2.2;for(let i=0;i<n;i++){const tx=h0+W*.16+i*W*.16,ty=eb+eh*.45;ctx.fillStyle='#e8892b';ctx.beginPath();ctx.arc(tx,ty,r,0,7);ctx.fill();ctx.strokeStyle='#6b3b10';ctx.lineWidth=.4;ctx.beginPath();for(let a=0;a<12;a+=.3){const rr=r*(1-a/14);ctx.lineTo(tx+Math.cos(a+t*20)*rr,ty+Math.sin(a+t*20)*rr);}ctx.stroke();ctx.fillStyle='#9aa3ad';ctx.fillRect(tx-.5,ty+r-.2,1,eh*.35);}}
-  if(P('intercooler')!=='stock'){ctx.fillStyle='#9aa3ad';ctx.fillRect(h1-1.4,fl-.5,1.6,eh*.55);ctx.strokeStyle='#5c636b';ctx.lineWidth=.25;for(let y=0;y<6;y++){ctx.beginPath();ctx.moveTo(h1-1.4,fl+y*eh*.09);ctx.lineTo(h1+.2,fl+y*eh*.09);ctx.stroke();}}
+  if(P('intercooler')!=='stock'){ctx.fillStyle='#9aa3ad';ctx.fillRect(h1-1.6,fl-.5,1.6,eh*.55);ctx.strokeStyle='#5c636b';ctx.lineWidth=.25;for(let y=0;y<6;y++){ctx.beginPath();ctx.moveTo(h1-1.4,fl+y*eh*.09);ctx.lineTo(h1+.2,fl+y*eh*.09);ctx.stroke();}}
   if(P('nos')!=='stock'){ctx.fillStyle='#2f6fd6';ctx.fillRect(h0+.5,eb,2.2,eh*.85);ctx.fillStyle='#ddd';ctx.fillRect(h0+.9,eb+eh*.85,1.4,.9);}
   if(P('headers')!=='stock'){ctx.strokeStyle='#d9a066';ctx.lineWidth=.7;for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(cx-W*.2+i*W*.1,eb+.2);ctx.quadraticCurveTo(cx-W*.24+i*W*.1,eb-1.4,cx-W*.32,eb-1.8);ctx.stroke();}}
  }
  // battery
  ctx.fillStyle='#111';ctx.fillRect(h1-W*.32,fl,3,2.2);ctx.fillStyle='#e23b3b';ctx.fillRect(h1-W*.32+.3,fl+2.2,.7,.5);
+ ctx.restore();
+ if(cab){ctx.strokeStyle='rgba(0,0,0,.7)';ctx.lineWidth=.6;ctx.strokeRect(h0,fl,W,top-fl);ctx.fillStyle=build.paint&&build.paint.c||CARS[build.car].color;ctx.save();ctx.translate(h0,fl);ctx.rotate(-.35);ctx.fillRect(0,-1.2,W,1.2);ctx.restore();return;}
  // the hood itself, propped open at the windshield end
  const ha=1.05;ctx.save();ctx.translate(h0,topAt(B,h0));ctx.rotate(ha);const L=h1-h0+2;ctx.fillStyle=build.paint&&build.paint.c||CARS[build.car].color;ctx.fillRect(0,-.6,L,1.2);ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(0,-.6,L,.4);ctx.restore();
  ctx.strokeStyle='#888';ctx.lineWidth=.35;ctx.beginPath();ctx.moveTo(h1-W*.2,fl+2);ctx.lineTo(h0+Math.cos(ha)*L*.6,topAt(B,h0)+Math.sin(ha)*L*.6);ctx.stroke();
@@ -8164,6 +8167,7 @@ function drawLights(ctx,B,build,t){
  if(L==='led'||L==='halo'){const g=ctx.createRadialGradient(hx+2,hy,0,hx+2,hy,10);g.addColorStop(0,'rgba(220,240,255,.45)');g.addColorStop(1,'rgba(220,240,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(hx+2,hy,10,0,7);ctx.fill();}
  const [tx,ty]=B.tail;const tg=ctx.createLinearGradient(tx,ty-2,tx,ty+2);tg.addColorStop(0,SM?'#5a161b':'#ff4a52');tg.addColorStop(1,SM?'#2a080b':'#9c0e17');ctx.fillStyle=tg;ctx.fillRect(tx-.3,ty-1.9,2.4,3.8);ctx.fillStyle='rgba(255,255,255,.55)';ctx.fillRect(tx+.1,ty-1.7,.5,1.2);ctx.fillStyle='rgba(240,240,240,.7)';ctx.fillRect(tx-.3,ty+1.9,2.4,.7);
 }
+let HOOD_OPEN=false;
 function drawAero(ctx,B,build,col,top,sill,t){
  const dark='#141619',cf=carbon(ctx);
  const fr=optOf(build,'front').id;
@@ -8182,7 +8186,7 @@ function drawAero(ctx,B,build,col,top,sill,t){
  else if(ex==='catback'){ctx.fillRect(-2,sill+.4,2.8,1.4);}
  else{ctx.fillStyle='#55595e';ctx.fillRect(-1,sill+.6,1.6,.9);}
  // hood
- const hd=optOf(build,'hood').id,hx=B.hood[0]+(B.hood[1]-B.hood[0])*.32;
+ const hd=HOOD_OPEN?'stock':optOf(build,'hood').id,hx=B.hood[0]+(B.hood[1]-B.hood[0])*.32;
  const hy=hoodY(B,hx);
  if(hd==='scoop'){ctx.fillStyle=shade(col,-.15);ctx.beginPath();ctx.moveTo(hx-6,hy);ctx.lineTo(hx-4,hy+2.4);ctx.lineTo(hx+5,hy+1.6);ctx.lineTo(hx+7,hy);ctx.fill();ctx.fillStyle='#0c0d0f';ctx.fillRect(hx-4.4,hy+.7,1.2,1.4);}
  if(hd==='vent'){ctx.strokeStyle='rgba(0,0,0,.6)';ctx.lineWidth=.4;for(let i=0;i<4;i++){ctx.beginPath();ctx.moveTo(hx-3+i*2,hy+.1);ctx.lineTo(hx-2+i*2,hy+.7);ctx.stroke();}}
@@ -8310,11 +8314,31 @@ function horn(kind){
 function bassThump(level){const c=ac();if(!c)return;for(let i=0;i<4;i++){const t=c.currentTime+i*.42;const o=c.createOscillator();o.type='sine';o.frequency.setValueAtTime(70,t);o.frequency.exponentialRampToValueAtTime(38,t+.25);const g=c.createGain();g.gain.setValueAtTime(.35*level,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g).connect(AUD.master);o.start(t);o.stop(t+.32);}}
 function cha(){[523,659,784,1046].forEach((f,i)=>tone(f,.14,'triangle',.12,i*.08));}
 function beep(hi){tone(hi?1046:523,hi?.45:.18,'square',.1);}
+/* V38: garage sound effects, one for each kind of change. */
+function nz(c,t,dur,type,freq,vol,q,f2){const s=c.createBufferSource();s.buffer=noiseBuf(c);const f=c.createBiquadFilter();f.type=type;f.frequency.setValueAtTime(freq,t);if(f2)f.frequency.exponentialRampToValueAtTime(f2,t+dur);if(q)f.Q.value=q;const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f).connect(g).connect(AUD.master);s.start(t,Math.random()*.5);s.stop(t+dur+.02);}
+function thud(c,t,f0,f1,dur,vol){const o=c.createOscillator();o.type='sine';o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g).connect(AUD.master);o.start(t);o.stop(t+dur+.02);}
+function ping(c,t,f,dur,vol){const o=c.createOscillator();o.type='triangle';o.frequency.value=f;const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g).connect(AUD.master);o.start(t);o.stop(t+dur+.02);}
+function sfx(kind){const c=ac();if(!c)return;const t=c.currentTime;
+ if(kind==='ratchet'){for(let i=0;i<9;i++)nz(c,t+i*.055,.03,'highpass',3200+(i%2)*900,.22);thud(c,t+.52,180,90,.12,.25);}            // engine parts: wrench ratchet + snug
+ else if(kind==='impact'){const o=c.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(95,t);const g=c.createGain();g.gain.setValueAtTime(0,t);for(let i=0;i<14;i++){g.gain.setValueAtTime(.09,t+i*.04);g.gain.setValueAtTime(.01,t+i*.04+.022);}g.gain.setValueAtTime(.0001,t+.6);o.connect(g).connect(AUD.master);o.start(t);o.stop(t+.62);nz(c,t,.6,'bandpass',2200,.05,1);ping(c,t+.62,1900,.15,.06);} // wheels: impact gun
+ else if(kind==='spray'){nz(c,t,.12,'bandpass',5200,.05,1.5);nz(c,t+.1,.75,'bandpass',4800,.11,1.2,3600);ping(c,t,1200,.05,.05);ping(c,t+.05,1500,.05,.04);} // paint: can shake + spray
+ else if(kind==='clunk'){thud(c,t,140,60,.18,.45);nz(c,t,.08,'lowpass',900,.3);ping(c,t+.03,2600,.25,.05);for(let i=0;i<3;i++)nz(c,t+.25+i*.09,.03,'highpass',3500,.15);} // body: panel drop + bolts
+ else if(kind==='click'){ping(c,t,2400,.05,.08);ping(c,t+.07,3100,.12,.07);}                                                       // lights / interior: click + chime
+ else if(kind==='whoosh'){nz(c,t,.5,'bandpass',600,.18,1,2400);thud(c,t+.42,120,70,.1,.2);}                                           // suspension: air + settle
+ else if(kind==='undo'){for(let i=0;i<10;i++)nz(c,t+i*.05,.03,'highpass',4200-i*250,.2);nz(c,t+.5,.5,'bandpass',3000,.14,1,500);thud(c,t+.95,110,50,.25,.4);} // back to stock: reverse ratchet, air hiss, thunk
+ else if(kind==='hoodopen'){nz(c,t,.35,'bandpass',900,.06,6,1400);thud(c,t+.33,90,70,.1,.18);}
+ else if(kind==='hoodclose'){nz(c,t,.15,'bandpass',800,.05,5);thud(c,t+.15,120,55,.22,.5);nz(c,t+.15,.06,'lowpass',700,.35);}
+ else if(kind==='select'){ping(c,t,880,.06,.05);}
+ else if(kind==='tune'){ping(c,t,600+Math.random()*400,.04,.04);}
+ else if(kind==='deny'){tone(180,.18,'square',.08);tone(140,.22,'square',.08,.12);}
+}
+// Which sound a part makes when you install it.
+const SLOT_SFX={engine:'ratchet',power:'ratchet',drive:'ratchet',weight:'clunk',susp:'whoosh',wheels:'impact',body:'clunk',lights:'click',interior:'click'};
 /* ===== Street Tuner · state + garage UI ===== */
 const KEY='wwg-v28-street';
 const money=n=>'$'+Math.round(n).toLocaleString('en-US');
 const escH=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function freshState(){return {v:1,cash:1500,rep:0,active:null,cars:{},creative:false,auto:false,sound:true,wins:0,losses:0,races:0,best:null,crews:[0,0,0,0,0],shows:{played:0,won:0,lastSig:''},trophies:{},daily:{d:'',done:false},ladder:11,dist:'quarter',tree:'sport',slips:[],bestRt:null,stats:{perfect:0,nos:0,maxHp:0,shows3:0,earned:0},seen:{}};}
+function freshState(){return {v:1,cash:0,rep:0,active:null,cars:{},creative:false,auto:false,sound:true,wins:0,losses:0,races:0,best:null,crews:[0,0,0,0,0],shows:{played:0,won:0,lastSig:''},trophies:{},daily:{d:'',done:false},ladder:11,dist:'quarter',tree:'sport',slips:[],bestRt:null,stats:{perfect:0,nos:0,maxHp:0,shows3:0,earned:0},seen:{}};}
 let S=(()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.v===1){const o=Object.assign(freshState(),s);for(const k in o.cars){const c=o.cars[k];if(!c._v36&&CARS[c.car]){migrateCar(c);for(const sl of SLOTS){if(partOk(c,sl.id,optOf(c,sl.id)))delete c.parts[sl.id];}}}return o;}}catch(e){}return freshState();})();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function newCar(id){const c=CARS[id];const pre=c.preset||{};const owned={};for(const k in pre)owned[k]=[pre[k]];return {_v36:1,car:id,parts:Object.assign({},pre),owned,paint:{c:c.color,finish:'gloss',wrap:'none',wrapC:'#ffffff',glow:GLOWS[0],cal:CALIPERS[1],rim:null,num:String(10+Math.floor(Math.random()*89)),plate:'WRENCH'},paintOwned:{finish:['gloss'],wrap:['none']},air:false};}
@@ -8323,7 +8347,7 @@ const level=()=>levelOf(S.rep);
 function addRep(n){const before=level();S.rep+=n;const after=level();if(after>before){cha();setTimeout(()=>levelUp(after),900);}}
 function levelUp(L){const un=[];SLOTS.forEach(s=>s.opts.forEach(o=>{if(o.lvl===L)un.push(o.name);}));const m=document.createElement('div');m.className='st-modal';m.style.zIndex=9200;m.innerHTML='<div class="st-card" style="max-width:520px;text-align:center"><div style="font-size:54px">⭐</div><h2 style="margin:4px 0;font-size:34px;color:#ffd02b">LEVEL UP! Rep level '+L+'</h2><p style="color:#cbd5df">New parts unlocked in the garage:</p><div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0 14px">'+un.slice(0,14).map(n=>'<span class="st-pill" style="font-size:14px">🔓 '+escH(n)+'</span>').join('')+(un.length>14?'<span class="st-pill">+'+(un.length-14)+' more</span>':'')+'</div><button class="st-btn go" data-nav="garage" onclick="this.closest(\'.st-modal\').remove()">GO TO THE GARAGE</button> <button class="st-btn alt" onclick="this.closest(\'.st-modal\').remove()">LATER</button></div>';body.appendChild(m);burst('crowd',1.2);}
 function earn(n,why){S.cash+=n;S.stats.earned+=n;if(n>0)toastST('+'+money(n)+(why?' · '+why:''));}
-function spend(n){if(S.creative)return true;if(S.cash<n){toastST('Not enough Street cash. Win races or car shows to earn more.');tone(180,.25,'square',.1);return false;}S.cash-=n;return true;}
+function spend(n){if(S.creative)return true;if(S.cash<n){toastST('Not enough Street cash. Win races or car shows to earn more.');sfx('deny');return false;}S.cash-=n;return true;}
 let toastTimer=0;
 function toastST(m){const e=document.getElementById('stToast');if(!e)return;e.textContent=m;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),2600);}
 const TROPHIES=[
@@ -8405,7 +8429,7 @@ function open(){
  loop();
  loginBonus();
 }
-function loginBonus(){if(!S.active)return;const d=new Date().toISOString().slice(0,10);if(S.login&&S.login.d===d)return;const y=new Date(Date.now()-864e5).toISOString().slice(0,10);const streak=S.login&&S.login.d===y?Math.min(30,S.login.n+1):1;S.login={d,n:streak};const bonus=75*Math.min(streak,7)+50;S.cash+=bonus;save();top();setTimeout(()=>toastST('📅 Day '+streak+' streak! +'+money(bonus)+' Street cash. Come back tomorrow for more.'),600);if(streak>=7)trophy('streak7');}
+function loginBonus(){if(!S.active)return;const d=new Date().toISOString().slice(0,10);if(S.login&&S.login.d===d)return;const y=new Date(Date.now()-864e5).toISOString().slice(0,10);const first=!S.login;const streak=S.login&&S.login.d===y?Math.min(30,S.login.n+1):1;S.login={d,n:streak};if(first){save();setTimeout(()=>toastST('🏁 You start with $0. Win your first street race to earn cash for parts!'),600);return;}const bonus=75*Math.min(streak,7)+50;S.cash+=bonus;save();top();setTimeout(()=>toastST('📅 Day '+streak+' streak! +'+money(bonus)+' Street cash. Come back tomorrow for more.'),600);if(streak>=7)trophy('streak7');}
 function close(){stopEngine();root.style.display='none';cancelAnimationFrame(raf);raf=0;if(window.__stOnClose)window.__stOnClose();}
 function top(){
  const L=level(),a=LEVELS[L]||0,b=LEVELS[L+1]||a+1;
@@ -8479,16 +8503,17 @@ handlers.junkbuy=d=>{const deal=junkDeals()[+d.i];if(!deal)return;const b=cur();
 /* ---------- garage ---------- */
 let gCat='engine',preview=null;
 let hoodUp=false;
-handlers.hoodup=()=>{hoodUp=!hoodUp;const b=body.querySelector('#stHoodBtn');if(b)b.textContent=hoodUp?'🔧 Hood down':'🔧 Hood up';};
+let hoodAuto=false;const hoodLabel=()=>{const b=body.querySelector('#stHoodBtn');if(b)b.textContent=hoodUp?'🔧 Close hood':'🔧 Open hood';};
+handlers.hoodup=()=>{hoodUp=!hoodUp;hoodAuto=false;hoodLabel();sfx(hoodUp?'hoodopen':'hoodclose');};
 SCREENS.garage=()=>{
  preview=null;
- body.innerHTML='<div class="st-gar"><div><div class="st-view"><canvas id="stCar" data-ar=".5"></canvas><div class="st-tools"><button data-act="rev">🔊 Rev it</button><button data-act="honk">📯 Horn</button><button data-act="air" id="stAirBtn">💨 Air ride</button><button data-act="photo">📸 Photo</button><button data-act="plate">🔤 Plate</button><button data-act="builds">💾 Builds</button><button data-act="hoodup" id="stHoodBtn">🔧 Hood up</button><button data-act="reset">↺ Stock</button></div><div class="st-stats" id="stStats"></div><div class="st-meters" id="stMeters"></div><div class="st-combos" id="stCombos"></div></div></div>'
+ body.innerHTML='<div class="st-gar"><div><div class="st-view"><canvas id="stCar" data-ar=".5"></canvas><div class="st-tools"><button data-act="rev">🔊 Rev it</button><button data-act="honk">📯 Horn</button><button data-act="air" id="stAirBtn">💨 Air ride</button><button data-act="photo">📸 Photo</button><button data-act="plate">🔤 Plate</button><button data-act="builds">💾 Builds</button><button data-act="hoodup" id="stHoodBtn">🔧 Open hood</button><button data-act="reset">↺ Stock</button></div><div class="st-stats" id="stStats"></div><div class="st-meters" id="stMeters"></div><div class="st-combos" id="stCombos"></div></div></div>'
  +'<div class="st-shop"><div class="st-cats" id="stCats"></div><div class="st-list" id="stList"></div><div class="st-buy" id="stBuy"></div></div></div>';
- renderShop();
+ renderShop();if((gCat==='engine'||gCat==='power')&&!hoodUp){hoodUp=true;hoodAuto=true;}hoodLabel();
  let shake=0;
  drawFn=t=>{const c=body.querySelector('#stCar');if(!c)return;const x=fitCanvas(c);showroom(x,c.width,c.height,t);const b=previewBuild();
   const rv=engine?engine._rpm||0:0;shake=engine?Math.sin(t*90)*Math.min(1.6,rv/2500):0;
-  carOnFloor(x,b,c.width,c.height,t,{w:c.width*.78,y:c.height*.84+shake,car:{bounce:0,hoodOpen:hoodUp||gCat==='engine'||gCat==='power'}});
+  carOnFloor(x,b,c.width,c.height,t,{w:c.width*.78,y:c.height*.84+shake,car:{bounce:0,hoodOpen:hoodUp}});
   if(engine&&engine._pop&&Math.random()<.25){const B=BODIES[CARS[b.car].body];const w=c.width*.78,u=w/100;x.fillStyle='rgba(255,'+(120+Math.random()*100|0)+',40,.9)';x.beginPath();x.ellipse((c.width-w)/2-3*u,c.height*.84-(B.sill+1)*u,4*u*Math.random()+u,u,0,0,7);x.fill();}
   x.fillStyle='rgba(255,255,255,.75)';x.font='700 '+(c.width*.018|0)+'px Arial';x.fillText('PLATE: '+(b.paint.plate||''),14,c.height-14);
  };
@@ -8544,21 +8569,21 @@ function renderBuy(){
  el.innerHTML='<div class="info"><b>'+escH(o.name)+'</b>'+(o.info?'<div style="color:#aab6c3;font-size:12.5px;margin:2px 0">'+escH(o.info)+'</div>':'<br>')+(why?'<span style="color:#ef4444">'+escH(why)+'</span>':lock?'<span style="color:#ef4444">Reach Street Rep level '+o.lvl+' to unlock.</span>':inst?'Installed on your car.':own?'You own this. Install it for free.':'Price: '+money(o.price||0))+'</div><button class="st-btn alt" data-act="cancel">CANCEL</button>'
   +(inst?'':'<button class="st-btn go" data-act="buy" '+(why||lock?'disabled':'')+'>'+(own?'INSTALL':'BUY '+money(o.price||0))+'</button>');
 }
-handlers.cat=d=>{gCat=d.c;preview=null;renderShop();const l=body.querySelector('#stList');if(l)l.scrollTop=0;};
+handlers.cat=d=>{const eng=c=>c==='engine'||c==='power';if(eng(d.c)&&!hoodUp){hoodUp=true;hoodAuto=true;sfx('hoodopen');}else if(!eng(d.c)&&hoodAuto){hoodUp=false;hoodAuto=false;sfx('hoodclose');}gCat=d.c;preview=null;renderShop();hoodLabel();const l=body.querySelector('#stList');if(l)l.scrollTop=0;};
 handlers.tunereset=()=>{const b=cur();delete b.fdK;delete b.tp;delete b.boostK;delete b.gearK;save();renderShop();toastST('Tuning reset.');};
-function onTune(e){const el=e.target.closest('[data-tune]');if(!el)return;const b=cur();const k=el.dataset.tune,v=+el.value;if(/^g\d$/.test(k)){const i=+k.slice(1);b.gearK=b.gearK||[];b.gearK[i]=v;if(b.gearK.every(x=>!x||Math.abs(x-1)<.005))delete b.gearK;const lab=document.getElementById('stTv_'+k);if(lab)lab.textContent=computeStats(b).gears[i].toFixed(2);renderStats();save();return;}
+let tuneT=0;function onTune(e){const el=e.target.closest('[data-tune]');if(!el)return;if(performance.now()-tuneT>90){tuneT=performance.now();sfx('tune');}const b=cur();const k=el.dataset.tune,v=+el.value;if(/^g\d$/.test(k)){const i=+k.slice(1);b.gearK=b.gearK||[];b.gearK[i]=v;if(b.gearK.every(x=>!x||Math.abs(x-1)<.005))delete b.gearK;const lab=document.getElementById('stTv_'+k);if(lab)lab.textContent=computeStats(b).gears[i].toFixed(2);renderStats();save();return;}
  if(k==='fdK'||k==='boostK'){if(Math.abs(v-1)<.005)delete b[k];else b[k]=v;}else{if(v===32)delete b.tp;else b.tp=v;}
  const lab=document.getElementById('stTv_'+k);if(lab)lab.textContent=k==='fdK'?(CARS[b.car].fd*v).toFixed(2):k==='tp'?v+' psi':Math.round(v*100)+'%';renderStats();save();}
-handlers.opt=d=>{preview={slot:d.s,id:d.o};const b=cur();if((b.parts[d.s]||'stock')===d.o)preview=null;renderShop();tone(880,.05,'triangle',.06);};
+handlers.opt=d=>{preview={slot:d.s,id:d.o};const b=cur();if((b.parts[d.s]||'stock')===d.o)preview=null;renderShop();sfx('select');};
 handlers.cancel=()=>{preview=null;renderShop();};
 handlers.buy=()=>{const b=cur();const s=SLOT[preview.slot],o=s.opts.find(x=>x.id===preview.id);
  if(!owns(b,s.id,o.id)){if(!spend(o.price||0))return;(b.owned[s.id]=b.owned[s.id]||[]).push(o.id);}
  b.parts[s.id]=o.id;if(o.id==='stock')delete b.parts[s.id];
  // parts that need something you just removed fall back to stock
  for(const sl of SLOTS){const ox=optOf(b,sl.id);if(partOk(b,sl.id,ox))delete b.parts[sl.id];}
- if(o.id!=='stock')trophy('firstmod');toastST('🔧 '+o.name+' installed!');tone(660,.08,'square',.08);tone(990,.12,'square',.08,.08);
+ if(o.id!=='stock')trophy('firstmod');toastST((o.id==='stock'?'↺ ':'🔧 ')+o.name+(o.id==='stock'?' put back on.':' installed!'));sfx(o.id==='stock'?'undo':(SLOT_SFX[s.cat]||'ratchet'));
  preview=null;checkBuildTrophies();save();top();renderShop();};
-handlers.reset=()=>{const b=cur();b.parts={};b.air=false;save();renderShop();toastST('Back to stock. You still own every part you bought.');};
+handlers.reset=()=>{const b=cur();if(!Object.keys(b.parts||{}).length){toastST('Your car is already stock.');sfx('deny');return;}b.parts={};b.air=false;preview=null;if(hoodAuto||hoodUp){}save();renderShop();sfx('undo');toastST('↺ Back to stock. You still own every part you bought, so you can put them back on for free.');};
 handlers.rev=()=>{const b=cur();const st=calibrate(computeStats(b));stopEngine();engine=makeEngine(st,b,1);if(!engine){toastST('Sound is off or not supported here.');return;}
  const e=engine;let r=900,t0=performance.now();const pts=[0,.5,.9,.55,.95,.35,0];
  const iv=setInterval(()=>{if(engine!==e){clearInterval(iv);return;}const k=(performance.now()-t0)/1000;const seg=Math.min(pts.length-2,Math.floor(k/.45));const f=(k/.45)-seg;const v=pts[seg]+(pts[seg+1]-pts[seg])*f;r=900+(st.red-900)*v;e._rpm=r;e._pop=(st.sound>.3||st.pops)&&f>.8&&pts[seg+1]<pts[seg];e.set(r,v>pts[seg]?1:.2,Math.min(1,v*1.5));
@@ -8584,7 +8609,7 @@ handlers.pt=d=>{const b=cur();preview=preview&&preview.slot==='paint'?preview:{s
  if(['rim','cal','glow'].includes(d.k)){b.paint[d.k]=d.v;delete preview.paint[d.k];if(!Object.keys(preview.paint).length)preview=null;save();}
  renderShop();};
 handlers.num=()=>{const v=(body.querySelector('#stNum').value||'').replace(/\D/g,'').slice(0,3);cur().paint.num=v||'1';save();toastST('Race number set.');};
-handlers.paintbuy=()=>{const b=cur();const c=paintCost(b,preview.paint);if(c&&!spend(c))return;Object.assign(b.paint,preview.paint);
+handlers.paintbuy=()=>{const b=cur();const c=paintCost(b,preview.paint);if(c&&!spend(c))return;Object.assign(b.paint,preview.paint);sfx('spray');
  if(preview.paint.finish&&!b.paintOwned.finish.includes(preview.paint.finish))b.paintOwned.finish.push(preview.paint.finish);
  if(preview.paint.wrap&&!b.paintOwned.wrap.includes(preview.paint.wrap))b.paintOwned.wrap.push(preview.paint.wrap);
  preview=null;save();top();renderShop();toastST('🎨 Fresh paint!');cha();checkBuildTrophies();};
@@ -8597,7 +8622,7 @@ SCREENS.dyno=()=>{
  let run=null;const prev=lastDyno;
  const nums=(hp,tq,r)=>{body.querySelector('#stDynoNums').innerHTML='<b style="font-size:34px;color:#ff8a2b">'+Math.round(hp)+'</b> hp<br><b style="font-size:26px;color:#5aa9ff">'+Math.round(tq)+'</b> lb-ft<br>Engine speed: <b>'+Math.round(r)+'</b> rpm<br>Redline: '+st.red+' rpm<br>Drive: '+st.drive+(st.boost?'<br>Boost: '+(optOf(b,'power').name):'');};
  nums(d.pkHp,d.pkTq,0);
- handlers.dynorun=()=>{run={t0:performance.now()};stopEngine();engine=makeEngine(st,b,.9);};
+ handlers.dynorun=()=>{run={t0:performance.now()};S.seen=S.seen||{};S.seen.dyno=1;stopEngine();engine=makeEngine(st,b,.9);};
  drawFn=t=>{const c=body.querySelector('#stDyno');if(!c)return;const x=fitCanvas(c),W=c.width,H=c.height;x.fillStyle='#0b0f14';x.fillRect(0,0,W,H);
   const L=W*.08,R=W*.97,T=H*.06,Bt=H*.86;const maxV=Math.max(200,Math.ceil(Math.max(d.pkHp,d.pkTq,prev?Math.max(prev.pkHp,prev.pkTq):0)/100)*100+50);
   x.strokeStyle='#1f2a35';x.lineWidth=1;x.fillStyle='#6b7a8a';x.font=(H*.035|0)+'px Arial';
@@ -8817,7 +8842,7 @@ SCREENS.racego=arg=>{
  function launchMe(forced){const now=R.t;if(!R.treeAt)startTree(R);
   const rp=me.rpm,[a,bb]=R.band;let q,bonus=0;
   if(st.ev){q='perfect';bonus=.1;}else if(rp>=a&&rp<=bb){q='perfect';bonus=.14;}else if(rp<a-st.red*.12){q='bog';bonus=-.05;}else if(rp>bb+st.red*.08){q='spin';bonus=-.3;}else q='good';
-  me.launched=true;me.launchAt=now;me.launchRpm=Math.max(1500,rp);me.launchBonus=bonus;me.gripK=track.mu;me.tireK=tireGrip(me.tt,st.tOpt);R.launch=q;R.tireAtLaunch=Math.round(me.tt);R.tireZone=tireZone(me.tt,st.tOpt);setTimeout(()=>say(R.tireZone==='green'?'TIRES: GREEN · full grip!':R.tireZone==='yellow'?'TIRES: YELLOW · a little slippery':'TIRES: RED · no grip! Do a better burnout',R.tireZone==='green'?'#22c55e':R.tireZone==='yellow'?'#ffd02b':'#ef4444'),350);
+  me.launched=true;me.launchAt=now;me.launchRpm=Math.max(1500,rp);me.launchBonus=bonus;me.gripK=track.mu;me.tireK=tireGrip(me.tt,st.tOpt);R.launch=q;R.tireAtLaunch=Math.round(me.tt);if(tireZone(me.tt,st.tOpt)==='green'){S.seen=S.seen||{};S.seen.greenLaunch=1;}R.tireZone=tireZone(me.tt,st.tOpt);setTimeout(()=>say(R.tireZone==='green'?'TIRES: GREEN · full grip!':R.tireZone==='yellow'?'TIRES: YELLOW · a little slippery':'TIRES: RED · no grip! Do a better burnout',R.tireZone==='green'?'#22c55e':R.tireZone==='yellow'?'#ffd02b':'#ef4444'),350);
   if(!me.red||forced!==true)say(q==='perfect'?'PERFECT LAUNCH!':q==='good'?'Good launch':q==='bog'?'BOGGED! Rev higher next time.':'WHEELSPIN! Too many revs.',q==='perfect'?'#22c55e':q==='good'?'#ffd02b':'#ef4444');
   if(q==='perfect')trophy('launch');if(q==='spin')burst('screech');if(R.phase!=='race')R.phase='race';}
  R.launchMe=launchMe;
@@ -9341,6 +9366,58 @@ function exportGarage(){const g=g3d();const b=S.cars.garage;if(!g||!b)return;g.p
 const prevOnClose=window.__stOnClose;window.__stOnClose=()=>{try{exportGarage();}catch(e){}if(prevOnClose)prevOnClose();};
 window.wwStreetGarage=()=>{open();const b=importGarage();if(b){S.active='garage';save();top();go('garage');toastST('🔧 Your garage build is here! Upgrades you make here show up on it in the 3D garage.');}};
 window.__stBridge={importGarage,exportGarage,RULES};
+/* ===== Street Tuner · step-by-step guide (V38) =====
+   A checklist that walks a new player from $0 to their first real build.
+   Each step checks the save, so it ticks itself off as soon as you do the thing. */
+const anyCar=f=>Object.values(S.cars||{}).some(f);
+const GUIDE=[
+ {id:'car',title:'Pick your first car',how:'Choose one of the three starter cars. It is free.',go:'hub',check:()=>!!S.active,cash:0},
+ {id:'race1',title:'Win your first street race',how:'Open Race and take on the first racer in Parking Lot Rookies. Hold BURNOUT until the tire gauge is green, roll up, then shift when the bar turns green. A win pays your first Street cash.',go:'race',hl:'[data-act=crewrace]',check:()=>(S.wins||0)>=1,cash:0},
+ {id:'part',title:'Buy your first upgrade',how:'Open the Garage. A cheap first mod: on the Weight reduction tab, tap Spare tire delete, then BUY. Less weight means a quicker car. Save up for engine parts next.',go:'garage',cat:'weight',hl:'[data-act=opt][data-s=spare][data-o=del]',check:()=>!!(S.trophies&&S.trophies.firstmod),cash:100},
+ {id:'tires',title:'Launch with your tires in the GREEN',how:'In a race, hold BURNOUT and watch the TIRE TEMP gauge. Stop when the needle sits in the small green zone, then roll up. Green tires give full grip.',go:'race',hl:'[data-act=crewrace]',check:()=>!!(S.seen&&S.seen.greenLaunch),cash:100},
+ {id:'shift',title:'Hit a perfect shift',how:'Shift while the needle is inside the small green zone on the shift bar. Too early bogs the engine, too late hits the limiter.',go:'race',hl:'[data-act=crewrace]',check:()=>((S.stats&&S.stats.perfect)||0)>=1,cash:100},
+ {id:'dyno',title:'Test your car on the dyno',how:'Open Dyno and press RUN. You will see your horsepower and torque curve, and where to shift.',go:'dyno',hl:'[data-act=dynorun]',check:()=>!!(S.seen&&S.seen.dyno),cash:50},
+ {id:'tune',title:'Tune your car',how:'In the Garage, open the Tuning tab and lower your rear tire pressure. Drag racers run low pressure for more grip. Tuning is free.',go:'garage',cat:'tuning',hl:'[data-tune=tp]',check:()=>anyCar(c=>c.tp||c.fdK||c.gearK),cash:50},
+ {id:'show',title:'Enter a car show',how:'Open Car show and enter Cars & Coffee. Judges score your paint, wheels, stance, engine and more.',go:'show',hl:'[data-act=enter]',check:()=>((S.shows&&S.shows.played)||0)>=1,cash:150},
+ {id:'boss',title:'Beat the Parking Lot Rookies boss',how:'Win all five races in the first crew. Upgrade your car between races if they start beating you.',go:'race',hl:'[data-act=crewrace]',check:()=>(S.crews&&S.crews[0]||0)>=CREWS[0].racers.length,cash:300},
+ {id:'level',title:'Reach Rep level 2',how:'Keep racing and showing. Rep level 2 unlocks tournaments, bracket racing and The List.',go:'race',check:()=>level()>=2,cash:200},
+];
+function guideState(){if(!S.guide){S.guide={done:{},hide:false};if(S.active)for(const s of GUIDE){try{if(s.check())S.guide.done[s.id]=1;}catch(e){}}}return S.guide;}
+function guideNext(){const g=guideState();return GUIDE.find(s=>!g.done[s.id]);}
+function guideTick(){const g=guideState();let changed=false;
+ for(const s of GUIDE){if(!g.done[s.id]&&s.check()){g.done[s.id]=1;changed=true;
+  if(s.id!=='car'){if(s.cash){S.cash+=s.cash;}sfx('click');cha&&cha();const n=GUIDE.filter(x=>g.done[x.id]).length;
+   toastST('✅ Guide step '+n+' done: '+s.title+(s.cash?' · +'+money(s.cash):''));}}}
+ if(changed){save();top();}
+ if(!g.allDone&&GUIDE.every(s=>g.done[s.id])){g.allDone=1;save();setTimeout(()=>toastST('🏆 Guide complete! You know everything you need. Go build a monster.'),2800);}
+ renderGuide();}
+function renderGuide(){if(!root)return;let el=root.querySelector('#stGuide');const g=guideState();const s=guideNext();setTimeout(()=>root.classList.toggle('st-has-guide',!!root.querySelector('#stGuide')),0);
+ const hideNow=!s||g.hide||screen==='racing'||!S.active||!!root.querySelector('#stRace');
+ if(hideNow){if(el)el.remove();if(!s||!S.active)return;if(g.hide&&!root.querySelector('#stRace'))guideTab();else{const t=root.querySelector('#stGuideTab');if(t)t.remove();}return;}
+ const t=root.querySelector('#stGuideTab');if(t)t.remove();
+ const n=GUIDE.indexOf(s)+1;
+ if(!el){el=document.createElement('div');el.id='stGuide';el.className='st-guide';root.appendChild(el);}
+ const html='<div class="gtop"><b>📋 Step '+n+' of '+GUIDE.length+'</b><span><button data-act="guidelist" title="All steps">☰</button><button data-act="guidehide" title="Hide the guide">✕</button></span></div><div class="gt">'+escH(s.title)+'</div><div class="gh">'+escH(s.how)+'</div>'+(s.go?'<button class="st-btn go gs" data-act="guidego">👉 SHOW ME</button>':'')+(s.cash?'<span class="gr">Reward: '+money(s.cash)+'</span>':'');
+ if(el.dataset.k!==s.id+screen){el.innerHTML=html;el.dataset.k=s.id+screen;}}
+function guideTab(){if(root.querySelector('#stGuideTab'))return;const b=document.createElement('button');b.id='stGuideTab';b.className='st-guide-tab';b.dataset.act='guideshow';b.textContent='📋 Guide';root.appendChild(b);}
+handlers.guidehide=()=>{guideState().hide=true;save();renderGuide();toastST('Guide hidden. Tap 📋 Guide in the corner to bring it back.');};
+handlers.guideshow=()=>{guideState().hide=false;save();renderGuide();};
+handlers.guidego=()=>{const s=guideNext();if(!s)return;if(s.cat)gCat=s.cat;go(s.go);setTimeout(()=>{const t=s.hl&&body.querySelector(s.hl);if(t){t.scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('st-glow');setTimeout(()=>t.classList.remove('st-glow'),6000);}},120);};
+handlers.guidelist=()=>{const g=guideState();const m=document.createElement('div');m.className='st-modal';m.style.zIndex=9200;
+ m.innerHTML='<div class="st-card" style="max-width:560px;width:94vw;max-height:88vh;overflow:auto"><h2 style="margin:0 0 4px">📋 Step-by-step guide</h2><div style="color:#aab6c3;margin-bottom:10px">Do these in order to go from $0 to your first real build. Steps tick off by themselves.</div>'
+ +GUIDE.map((s,i)=>{const d=!!g.done[s.id],nx=!d&&s===guideNext();return '<div style="display:flex;gap:10px;padding:8px;border-radius:10px;margin:4px 0;background:'+(nx?'#2a2314':'#151c25')+';border:1px solid '+(d?'#22c55e':nx?'#ffd02b':'#243040')+'"><b style="font-size:20px;width:28px;text-align:center">'+(d?'✅':nx?'👉':(i+1))+'</b><div><b>'+escH(s.title)+'</b>'+(s.cash?' <span class="st-pill">+'+money(s.cash)+'</span>':'')+'<div style="color:#aab6c3;font-size:13px">'+escH(s.how)+'</div></div></div>';}).join('')
+ +'<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="st-btn alt" data-act="guidereset">START GUIDE OVER</button><button class="st-btn" data-close>CLOSE</button></div></div>';
+ m.addEventListener('click',e=>{if(e.target===m||e.target.closest('[data-close]'))m.remove();if(e.target.closest('[data-act=guidereset]')){S.guide={done:{},hide:false};save();m.remove();guideTick();}});root.appendChild(m);};
+const GUIDE_CSS=`.st-guide{position:absolute;left:12px;bottom:12px;z-index:9050;width:min(340px,calc(100vw - 24px));background:#111821ee;border:2px solid #ffd02b;border-radius:14px;padding:10px 12px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.5);font-size:13px}
+.st-guide .gtop{display:flex;justify-content:space-between;align-items:center;color:#ffd02b;font-size:12px;letter-spacing:.5px}.st-guide .gtop button{background:#1f2832;border:1px solid #33404d;color:#fff;border-radius:7px;padding:2px 8px;margin-left:4px}
+.st-guide .gt{font-weight:900;font-size:16px;margin:4px 0 2px}.st-guide .gh{color:#cbd5df;line-height:1.35}.st-guide .gs{margin-top:8px;padding:8px 14px;font-size:13px}.st-guide .gr{margin-left:10px;color:#7dff9b;font-weight:800;font-size:12px}
+.st-has-guide .st-body>*:last-child{margin-bottom:200px}
+.st-guide-tab{position:absolute;left:12px;bottom:12px;z-index:9050;background:#ffd02b;color:#111;border:0;border-radius:999px;padding:8px 14px;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.st-glow{outline:3px solid #ffd02b!important;outline-offset:2px;animation:stGlow 1s ease-in-out infinite}@keyframes stGlow{50%{outline-color:#ff8a2b;box-shadow:0 0 18px #ffd02b}}
+@media (max-height:520px),(max-width:640px){.st-guide{width:auto;max-width:62vw;padding:4px 8px;font-size:11px;bottom:6px;left:6px;display:flex;align-items:center;gap:8px;border-width:1.5px}.st-guide .gtop b{display:none}.st-guide .gtop{order:3}.st-guide .gt{font-size:12px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34vw}.st-guide .gh,.st-guide .gr{display:none}.st-guide .gs{margin:0;padding:5px 9px;font-size:11px;white-space:nowrap}.st-has-guide .st-body>*:last-child{margin-bottom:46px}}`;
+(()=>{const st=document.createElement('style');st.textContent=GUIDE_CSS;document.head.appendChild(st);})();
+{const _go=go;go=function(s,a){_go(s,a);try{guideTick();}catch(e){}};}
+setInterval(()=>{try{if(root&&root.style.display!=='none')guideTick();}catch(e){}},1200);
 })();
 
 </script>
