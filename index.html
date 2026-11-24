@@ -1941,7 +1941,7 @@ function buildTools(){
  wwRenderToolDrawers();
 }
 function startGame(i){if(E){E=false;cash=bank.cash;xp=bank.xp;$('#rc').style.display='none'}D=DIFFS[i];if(!started){cash=600;xp=0;started=true}showL=D.lab===2;buildTools();$('#plh').style.display=$('#pl').style.display=D.list?'':'none';$('#lb').style.display=D.lab?'':'none';$('#lb').classList.toggle('on',showL);$('#lv').textContent=D.n;$('#start').style.display='none';load(-1); /* The career menu already selected the contract; do not reopen the board here. */}
-function showStart(){$('#modal').classList.remove('show');const st=$('#start');st.style.display='flex';st.innerHTML='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V38</small></h1><div class="mu" style="margin-bottom:14px">Select difficulty tier to begin:</div>'+DIFFS.map((d,i)=>'<button class="card-select" data-d="'+i+'"><b>'+(i+1)+'. '+d.n+'</b><span>'+d.d+'</span><i>'+availTools(d).length+' tools · '+d.pool.length+' jobs · pay ×'+d.pm+'</i></button>').join('')+'<button class="card-select" data-d="x"><b>Sandbox Mode</b><span>Free play with sandbox inventory. Garage upgrades, including the two-post lift, still require purchase.</span><i>'+availTools(EXPD).length+' available tools · sandbox</i></button>'+(started?'<button class="card-select rs" data-d="r">Reset saved progress</button>':'');}
+function showStart(){$('#modal').classList.remove('show');const st=$('#start');st.style.display='flex';st.innerHTML='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V39</small></h1><div class="mu" style="margin-bottom:14px">Select difficulty tier to begin:</div>'+DIFFS.map((d,i)=>'<button class="card-select" data-d="'+i+'"><b>'+(i+1)+'. '+d.n+'</b><span>'+d.d+'</span><i>'+availTools(d).length+' tools · '+d.pool.length+' jobs · pay ×'+d.pm+'</i></button>').join('')+'<button class="card-select" data-d="x"><b>Sandbox Mode</b><span>Free play with sandbox inventory. Garage upgrades, including the two-post lift, still require purchase.</span><i>'+availTools(EXPD).length+' available tools · sandbox</i></button>'+(started?'<button class="card-select rs" data-d="r">Reset saved progress</button>':'');}
 
 $('#start').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.d===undefined)return;if(b.dataset.d==='r'){if(confirm('Erase saved cash, XP, upgrades and badges?')){try{localStorage.removeItem('wwg1');localStorage.removeItem('wwg-scrap-v67')}catch(x){}location.reload()}}else if(b.dataset.d==='x'){startExp()}else{const tier=Number(b.dataset.d);if(Number.isInteger(tier)&&DIFFS[tier])startGame(tier);}});
 $('#pl').innerHTML=Object.keys(parts).filter(n=>n!=='2-Post Lift'&&n!=='2-Post Hydraulic Lift').sort((a,b)=>{const order=['Hood','Battery','Positive terminal','Negative terminal'];const ai=order.indexOf(a),bi=order.indexOf(b);return (ai<0?999:ai)-(bi<0?999:bi)||a.localeCompare(b)}).map(n=>'<button data-n="'+n+'">'+n+'</button>').join('');
@@ -3009,7 +3009,7 @@ function wwSettingsModal(){
 
 let wwClassChosenThisVisit=false, wwJobChosenThisVisit=false;
 function wwMenu(){ $('#modal').classList.remove('show'); const st=$('#start'); st.style.display='flex'; const step=WW_MERGE.step;
- const head='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V38</small></h1><div style="color:var(--mu);margin:6px 0 16px">CAREER GARAGE · BALANCED REALISM</div><div style="display:flex;gap:8px;margin-bottom:18px">'+[1,2].map(n=>'<button class="'+(step===n?'on':'')+'" data-step="'+n+'">STEP '+n+'</button>').join('')+'</div>';
+ const head='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V39</small></h1><div style="color:var(--mu);margin:6px 0 16px">CAREER GARAGE · BALANCED REALISM</div><div style="display:flex;gap:8px;margin-bottom:18px">'+[1,2].map(n=>'<button class="'+(step===n?'on':'')+'" data-step="'+n+'">STEP '+n+'</button>').join('')+'</div>';
  let body='';
  if(step===1){body=(WW_MERGE.levelCompletionNotice?'<div class="row-card" style="border:2px solid var(--ac);margin-bottom:14px;background:rgba(255,180,50,.09)"><div><b>LEVEL COMPLETED: '+WW_MERGE.levelCompletionNotice.completed+'</b><span class="mu">You completed every job in this mechanic level.</span>'+(WW_MERGE.levelCompletionNotice.next?'<span class="mu" style="display:block;color:var(--ac);font-weight:800;margin-top:5px">NEXT LEVEL UNLOCKED: '+WW_MERGE.levelCompletionNotice.next+'</span>':'<span class="mu" style="display:block;color:var(--ac);font-weight:800;margin-top:5px">ALL CAREER LEVELS COMPLETED</span>')+'</div></div>':'')+'<h2 style="margin:0 0 12px">1. Choose your mechanic class</h2>'+WW_CLASSES.slice(0,5).map((n,i)=>{const locked=!wwClassUnlocked(i);return '<button class="card-select" data-class="'+i+'" '+(locked?'disabled':'')+' style="opacity:'+(locked?'.5':'1')+';border-color:'+(wwClassChosenThisVisit&&WW_MERGE.cls===i?'var(--ac)':'var(--bd)')+'"><b>'+n+'</b><span>'+(i===0?'Begin with basic battery, tire, oil-service and inspection contracts.':i===1?'A separate set of cooling, brake and wheel-end service jobs.':i===2?'New charging, ignition, starter and engine-performance diagnosis jobs.':i===3?'Advanced transmission, steering and cooling-system diagnosis contracts.':'The toughest specialist diagnostics: engine condition, fuel delivery, electrical systems and transmission performance.')+'</span><i>'+(locked?'LOCKED · COMPLETE EVERY '+WW_CLASSES[i-1].toUpperCase()+' JOB FIRST':'CAREER RANK '+(i+1)+' · '+DIFFS[i].pool.length+' CONTRACTS · UNLOCKED')+'</i></button>';}).join('')+'<div class="row-card"><div><b>Reference vehicle</b><span class="mu">2001 Ford Ranger · This is the vehicle currently modeled in the garage.</span></div></div>'+'<button class="card-select" data-sandbox-select><b>🧰 Sandbox Mode</b><span>Play however you want: the free garage and your build, any repair job, and Street Tuner drag racing and car shows. Nothing here changes your career save.</span><i>FREE GARAGE & BUILDS · PICK A JOB · STREET TUNER</i></button>'
  } else if(WW_MERGE.cls===5){body='<h2 style="margin:0 0 12px">2. Enter Sandbox</h2><div class="mu" style="margin-bottom:12px">Free practice has no customer contract and gives you an unrestricted workbench. Parts inventory is unlimited in this mode. Permanent garage equipment is separate: the two-post lift, LED floodlights and deluxe tool chest still have to be purchased with saved Career garage funds.</div><button class="card-select" data-sandbox><b>ENTER EXPERIMENT / SANDBOX</b><span>Start free practice in the garage. An unpurchased two-post lift remains hidden and locked.</span><i>NO JOB ACTIVE · FREE PRACTICE</i></button>';
@@ -8338,8 +8338,9 @@ const SLOT_SFX={engine:'ratchet',power:'ratchet',drive:'ratchet',weight:'clunk',
 const KEY='wwg-v28-street';
 const money=n=>'$'+Math.round(n).toLocaleString('en-US');
 const escH=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function freshState(){return {v:1,cash:0,rep:0,active:null,cars:{},creative:false,auto:false,sound:true,wins:0,losses:0,races:0,best:null,crews:[0,0,0,0,0],shows:{played:0,won:0,lastSig:''},trophies:{},daily:{d:'',done:false},ladder:11,dist:'quarter',tree:'sport',slips:[],bestRt:null,stats:{perfect:0,nos:0,maxHp:0,shows3:0,earned:0},seen:{}};}
+function freshState(){return {v:1,cash:0,rep:0,active:null,cars:{},creative:false,auto:false,sound:true,wins:0,losses:0,races:0,best:null,crews:[0,0,0,0,0],shows:{played:0,won:0,lastSig:''},trophies:{},daily:{d:'',done:false},ladder:11,dist:'quarter',tree:'sport',slips:[],bestRt:null,stats:{perfect:0,nos:0,maxHp:0,shows3:0,earned:0},seen:{},pixel:false,_gfx38:1};}
 let S=(()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.v===1){const o=Object.assign(freshState(),s);for(const k in o.cars){const c=o.cars[k];if(!c._v36&&CARS[c.car]){migrateCar(c);for(const sl of SLOTS){if(partOk(c,sl.id,optOf(c,sl.id)))delete c.parts[sl.id];}}}return o;}}catch(e){}return freshState();})();
+if(!S._gfx38){S.pixel=false;S._gfx38=1;}S.pro=true;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function newCar(id){const c=CARS[id];const pre=c.preset||{};const owned={};for(const k in pre)owned[k]=[pre[k]];return {_v36:1,car:id,parts:Object.assign({},pre),owned,paint:{c:c.color,finish:'gloss',wrap:'none',wrapC:'#ffffff',glow:GLOWS[0],cal:CALIPERS[1],rim:null,num:String(10+Math.floor(Math.random()*89)),plate:'WRENCH'},paintOwned:{finish:['gloss'],wrap:['none']},air:false};}
 const cur=()=>S.cars[S.active];
@@ -8472,7 +8473,7 @@ SCREENS.pick=()=>{
  body.innerHTML='<div class="st-h">Welcome to Street Tuner 🏁</div><div class="st-sub">Build it, tune it, race it and show it off. Pick your first car. It is free.</div><div class="st-grid">'+STARTERS.map(k=>{const s=perfSummary({car:k,parts:{}});return '<div class="st-card"><canvas data-car="'+k+'" data-ar=".42" style="width:100%"></canvas><h3 style="margin:8px 0 4px">'+CARS[k].name+' '+clsBadge(s.pi)+'</h3><div class="mu" style="color:#aab6c3;font-size:14px;min-height:38px">'+CARS[k].desc+'</div><div style="margin:8px 0;font-size:13px;color:#cbd5df">'+s.hp+' hp · '+CARS[k].drive+' · 0-60 '+s.t60+'s · ¼ mile '+(+s.et).toFixed(2)+'s</div><button class="st-btn" data-act="pick" data-car="'+k+'">PICK THIS CAR</button></div>';}).join('')+'</div>';
  drawFn=t=>body.querySelectorAll('canvas[data-car]').forEach(c=>{const x=fitCanvas(c);showroom(x,c.width,c.height,t,{word:''});carOnFloor(x,{car:c.dataset.car,parts:{},paint:{}},c.width,c.height,t);});
 };
-handlers.pick=d=>{S.cars[d.car]=newCar(d.car);S.active=d.car;trophy('first');save();loginBonus();toastST('The '+CARS[d.car].name+' is yours! Open the garage to start modding.');go('hub');};
+handlers.pick=d=>{S.cars[d.car]=newCar(d.car);S.active=d.car;trophy('first');save();loginBonus();toastST('🔑 The '+CARS[d.car].name+' is yours! Next: tap 🏁 Race and win your first race.');go('hub');};
 SCREENS.hub=()=>{
  const b=cur(),s=perfSummary(b);const L=level();
  const crewIdx=S.crews.findIndex((n,i)=>n<CREWS[i].racers.length);
@@ -8739,7 +8740,7 @@ SCREENS.race=()=>{
  const me=perfSummary(cur());const chip=(k,v,lbl,on)=>'<button class="st-btn '+(on?'':'alt')+'" style="padding:6px 12px;font-size:13px" data-act="rset" data-k="'+k+'" data-v="'+v+'">'+lbl+'</button>';
  let h='<div class="st-h">Drag strip 🏁</div><div class="st-sub">Your car: '+escH(CARS[cur().car].name)+' '+clsBadge(me.pi)+' · ¼ mile about '+(+me.et).toFixed(2)+'s @ '+me.trap+' mph. Do a burnout, stage, watch the tree, and launch on green. Your reaction time counts!</div>'
  +nextRaceCard()
- +'<div class="st-card" style="margin:10px 16px;display:flex;gap:14px;flex-wrap:wrap;align-items:center"><b>Quick, bracket, test and tournament races:</b><span>Distance '+Object.keys(DISTS).map(k=>chip('dist',k,DISTS[k].name,S.dist===k)).join(' ')+'</span><span>Tree '+chip('tree','sport','Sportsman',S.tree==='sport')+' '+chip('tree','pro','Pro',S.tree==='pro')+'</span><span>Controls <button class="st-btn '+(S.pro?'alt':'')+'" style="padding:6px 12px;font-size:13px" data-act="ctl" data-v="0">🎮 Easy</button> <button class="st-btn '+(S.pro?'':'alt')+'" style="padding:6px 12px;font-size:13px" data-act="ctl" data-v="1">🏁 Pro (+25% cash)</button></span><span>Graphics <button class="st-btn '+(S.pixel===false?'alt':'')+'" style="padding:6px 12px;font-size:13px" data-act="pix" data-v="1">👾 Pixel</button> <button class="st-btn '+(S.pixel===false?'':'alt')+'" style="padding:6px 12px;font-size:13px" data-act="pix" data-v="0">✨ Smooth</button></span><div style="flex-basis:100%;color:#aab6c3;font-size:13px">'+(S.pro?'Pro: you do the burnout, pre-stage and stage yourself, and launch with ENTER or ↑ on green. Go early and you red light.':'Easy: tap SPACE to roll up, hold SPACE to rev, and the car launches itself on green. You just shift (SPACE) and hit nitrous (N).')+'</div></div>'
+ +'<div class="st-card" style="margin:10px 16px;display:flex;gap:14px;flex-wrap:wrap;align-items:center"><b>Quick, bracket, test and tournament races:</b><span>Distance '+Object.keys(DISTS).map(k=>chip('dist',k,DISTS[k].name,S.dist===k)).join(' ')+'</span><span>Tree '+chip('tree','sport','Sportsman',S.tree==='sport')+' '+chip('tree','pro','Pro',S.tree==='pro')+'</span><span>Graphics <button class="st-btn '+(S.pixel===false?'alt':'')+'" style="padding:6px 12px;font-size:13px" data-act="pix" data-v="1">👾 Pixel</button> <button class="st-btn '+(S.pixel===false?'':'alt')+'" style="padding:6px 12px;font-size:13px" data-act="pix" data-v="0">✨ Smooth</button></span><div style="flex-basis:100%;color:#aab6c3;font-size:13px">'+(TOUCH?'How to race: hold BURNOUT until the tire gauge is green, tap STAGE twice to roll into the beams, hold GAS in the green zone, tap LAUNCH on green, then tap SHIFT when the bar turns green. Go early and you red light.':'How to race: hold B for a burnout until the tire gauge is green, tap SPACE twice to roll into the beams, hold SPACE to rev in the green zone, press ENTER or ↑ on green, then SPACE to shift when the bar turns green. Go early and you red light.')+' <button class="st-btn '+(coachOn()?'':'alt')+'" style="padding:6px 12px;font-size:13px;margin-left:6px" data-act="coach">🎓 Race coach: '+(coachOn()?'ON':'OFF')+'</button></div></div>'
  +'<div style="display:flex;gap:10px;flex-wrap:wrap;padding:4px 16px 10px">'+(level()<2?'<div style="color:#aab6c3;font-size:14px;padding:10px 4px">🔒 Tournaments, bracket racing and The List unlock at <b>Rep level 2</b>. Win a few crew races first!</div>':'')+'<button class="st-btn" '+(level()<2?'style="display:none" ':'')+'data-act="tour" style="background:#ffd02b;box-shadow:0 4px 0 #b08d14">🏆 TOURNAMENT · 3 rounds · win '+money(tourPrize())+'</button><button class="st-btn go" data-act="quick">⚡ HEADS-UP RACE · win '+money(150+level()*50)+'</button><button class="st-btn" '+(level()<2?'hidden ':'')+'data-act="bracket" style="background:#5aa9ff;box-shadow:0 4px 0 #2b6cb0">🎯 BRACKET RACE · win '+money(bracketPrize())+'</button><button class="st-btn alt" data-act="test">⏱ TEST & TUNE</button><button class="st-btn alt" data-act="howto">❓ HOW TO RACE</button></div>';
  // The List
  const hL=h.length;const pos=S.ladder;const next=pos>1?Math.min(10,pos-1):null;
@@ -8757,7 +8758,9 @@ SCREENS.race=()=>{
  body.innerHTML=h;
 };
 handlers.rset=d=>{S[d.k]=d.v;save();go('race');};
-handlers.ctl=d=>{S.pro=d.v==='1';save();go('race');};
+handlers.ctl=()=>{};
+function coachOn(){return S.coach!==undefined?!!S.coach:(S.wins||0)<5;}
+handlers.coach=()=>{S.coach=!coachOn();save();toastST(S.coach?'🎓 Race coach on. It walks you through every step of a race.':'Race coach off.');if(screen==='race')go('race');else{const c=body.querySelector('#stCoach');if(c)c.style.display=S.coach?'':'none';}};
 handlers.pix=d=>{S.pixel=d.v==='1';save();go('race');};
 handlers.quick=()=>go('racego',{opp:quickOpp()});
 const tourPrize=()=>1200+level()*250;
@@ -8808,7 +8811,7 @@ SCREENS.racego=arg=>{
  const b=cur();const st=calibrate(computeStats(b));const opp=arg.opp;
  const dist=arg.dist||(arg.tour?S.dist:arg.opp&&arg.opp.dist)||S.dist,tree=arg.tree||(arg.tour?S.tree:S.tree);const track=arg.track||(arg.tour&&arg.tour.track)||pickTrack();
  const amb=Math.round(track.temp[0]+Math.random()*(track.temp[1]-track.temp[0]));
- body.innerHTML='<div style="padding:8px;display:flex;flex-direction:column;gap:8px;height:100%"><div class="st-view" style="flex:1;display:flex;align-items:center;justify-content:center;touch-action:none"><canvas id="stRace" data-ar=".5" style="max-height:100%"></canvas></div>'
+ body.innerHTML='<div style="padding:8px;display:flex;flex-direction:column;gap:8px;height:100%"><div class="st-view" style="flex:1;display:flex;align-items:center;justify-content:center;touch-action:none"><canvas id="stRace" data-ar=".5" style="max-height:100%"></canvas><div id="stCoach" class="st-coach"'+(coachOn()?'':' style="display:none"')+'></div></div>'
  +'<div id="stCtl" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'
  +'<button class="st-btn alt" id="stBurn" style="min-width:130px">🔥 BURNOUT<br><small style="font-size:11px">'+(TOUCH?'hold':'hold · B')+'</small></button>'
  +'<button class="st-btn go" id="stGas" style="min-width:170px;font-size:19px;padding:14px">GAS<br><small style="font-size:11px">SPACE</small></button>'
@@ -8817,6 +8820,7 @@ SCREENS.racego=arg=>{
  +'<button class="st-btn" id="stNos" style="min-width:100px;background:#7b4dff;box-shadow:0 4px 0 #4c2bb0;color:#fff;font-size:17px">NOS<br><small style="font-size:11px">N</small></button>'
  +'<button class="st-btn alt" id="stPurge">💨 PURGE<br><small style="font-size:11px">P</small></button>'
  +'<button class="st-btn alt" id="stLift">LIFT<br><small style="font-size:11px">hold ↓</small></button>'
+ +'<button class="st-btn alt" data-act="coach" title="Race coach on or off">🎓</button>'
  +'<button class="st-btn alt" data-nav="race">✖ QUIT</button></div></div>';
  const R=RACE={phase:'box',t:0,arg,b,st,opp,dist,D:DISTS[dist].m,tree,track,amb,me:newLane(st,amb),op:opp?newLane(calibrate(Object.assign({},opp.st||computeStats(opp.build),{_k:0})),amb):null,
   msgs:[],parts:[],shifts:{perfect:0,good:0,early:0,late:0},launch:'',burnHeld:false,nosUsed:false,res:null,bracket:arg.bracket||null,lift:false};
@@ -8829,7 +8833,7 @@ SCREENS.racego=arg=>{
  const say=(t,c)=>R.msgs.push({t,c:c||'#fff',age:0});R.say=say;
  say(track.name+' · '+DISTS[dist].name+' · '+TREES[tree].name,'#ffd02b');
  // ----- controls -----
- const easy=!S.pro;R.easy=easy;
+ const easy=false;R.easy=false;R.coach=coachOn();
  function gasDown(){if(me.red&&!me.launched)return;
   if(me.stg<2){if(me.stg===0&&easy){me.stg=.5;me.target=-ROLL.shallow;R.phase='stage';R.burnHeld=false;R.say('Rolling in…','#5aa9ff');return;}if(me.stg===.5){me.x=me.target-.0005;return;}if(me.stg===0){me.stg=.5;me.target=-ROLL.shallow-.18;R.phase='stage';say('Rolling into the beams…','#5aa9ff');if(R.burnHeld)R.burnHeld=false;}else if(me.stg===1){me.stg=2;me.target=-ROLL.shallow;say('STAGED. Hold GAS, launch on green!','#5aa9ff');burst('click');}return;}
   if(me.launched){doShift();return;}
@@ -8881,8 +8885,44 @@ SCREENS.racego=arg=>{
    btn.launch.innerHTML=(pre?'LAUNCH':'SHIFT')+'<br><small style="font-size:11px">'+(TOUCH?'tap':pre?'ENTER · ↑':'SPACE · ENTER · ↑')+'</small>';btn.launch.style.opacity=pre&&me.stg<2?.45:1;}
   const c=$('#stRace');if(!c)return;const ctx=fitCanvas(c);
   if(S.pixel!==false){const k=3.2;const w=Math.round(c.width/k),h=Math.round(c.height/k);const o=R._off||(R._off=document.createElement('canvas'));if(o.width!==w||o.height!==h){o.width=w;o.height=h;}const ox=o.getContext('2d');ox.imageSmoothingEnabled=false;drawRace(ox,w,h,R,t,true);ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(o,0,0,c.width,c.height);hud(ctx,c.width,c.height,R,t);}
-  else drawRace(ctx,c.width,c.height,R,t);};
+  else drawRace(ctx,c.width,c.height,R,t);
+  if(R.coach)coachTick(R,btn);};
 };
+/* ----- Race coach: tells a new racer exactly what to press, one step at a time ----- */
+function coachTick(R,btn){const el=body.querySelector('#stCoach');if(!el||el.style.display==='none'){if(R._cg){R._cg.classList.remove('st-glow');R._cg=null;}return;}
+ const me=R.me,st=R.st,T=TOUCH;const z=tireZone(me.tt,st.tOpt);const inBand=me.rpm>=R.band[0]&&me.rpm<=R.band[1];const tf=Math.round(me.tt);
+ const K=(t,p)=>T?t:p;let n,msg,sub='',glow=null,col='#ffd02b';
+ if(me.rec.fin){n=7;msg='Finished! Check your time slip.';sub='Lower ET wins. Reaction time counts too.';col='#22c55e';}
+ else if(me.red){n=5;msg='Red light. You left before the green.';sub='Next time wait for the GREEN bulb, not the yellows.';col='#ef4444';}
+ else if(me.launched){n=6;glow=btn.launch;
+  msg=K('Tap SHIFT when the shift bar turns GREEN','Press SPACE to SHIFT when the shift bar turns GREEN');
+  sub='Do it every gear. Too early bogs, too late hits the limiter.'+(st.nos&&!R.nosUsed?K(' Tap NOS for a boost!',' Press N for nitrous!'):'');}
+ else if(R.treeAt){n=5;glow=btn.launch;col='#22c55e';
+  msg=K('Keep holding GAS · tap LAUNCH on GREEN!','Keep holding SPACE · press ENTER (or ↑) on GREEN!');
+  sub=R.tree==='pro'?'Pro tree: all three yellows flash at once, then green right after.':'The three yellows count down. Go as the GREEN lights up.';}
+ else if(me.stg>=2){n=4;glow=btn.gas;
+  if(inBand){msg='Perfect revs! Hold it there.';sub='The tree will drop any second. Get ready to launch.';col='#22c55e';}
+  else if(me.rpm>R.band[1]){msg=K('Too many revs! Ease off GAS a little','Too many revs! Ease off SPACE a little');sub='Get the needle back into the GREEN launch zone.';col='#ef4444';}
+  else{msg=K('Press and HOLD the GAS button','Press and HOLD SPACE to rev');sub='Rev up until the needle is in the GREEN launch zone on the tach.'+(R.coach&&!st.lbw?' While the coach is on, a rev limiter stops you going too high.':'');}}
+ else if(me.stg===1){n=3;glow=btn.gas;msg=K('Tap STAGE again','Tap SPACE again');sub='You are PRE-STAGED (top bulbs lit). One more tap creeps you into the STAGE beam.';}
+ else if(me.stg===.5){n=2;msg='Rolling up to the line…';sub='Wait for the PRE-STAGE bulbs on the tree to light.';}
+ else if(R.burnHeld){n=1;glow=btn.burn;
+  if(z==='green'){msg=K('GREEN! Let go of BURNOUT now','GREEN! Let go of B now');col='#22c55e';sub='Tires are '+tf+'°F, right in the grip zone.';}
+  else if(me.tt>st.tOpt){msg=K('Too hot! Let go of BURNOUT','Too hot! Let go of B');col='#ef4444';sub='Let them cool back into the green.';}
+  else{msg='Keep holding… heating the tires';sub='Tire temp '+tf+'°F. Let go when the TIRE gauge needle is in the GREEN.';}}
+ else if(z==='green'||R.burned&&me.tt>st.tOpt){n=2;glow=btn.gas;
+  if(z!=='green'){msg='Tires too hot. Wait a second to cool…';sub='Or roll up anyway. Hot tires slip a bit.';}
+  else{msg=K('Tap STAGE ▶ to roll up to the line','Tap SPACE to roll up to the line');sub=(R.burned?'':'Your tires are already warm enough, so you can skip the burnout. ')+'Your car creeps up until the PRE-STAGE bulbs light.';col='#22c55e';}}
+ else{n=1;glow=btn.burn;msg=K('Press and HOLD 🔥 BURNOUT','Press and HOLD B for a burnout');sub='This heats your tires for grip. Watch the TIRE gauge and let go in the GREEN.';}
+ if(R._cg!==glow){if(R._cg)R._cg.classList.remove('st-glow');if(glow&&glow.style.display!=='none')glow.classList.add('st-glow');R._cg=glow;}
+ const steps=['Burnout','Roll up','Stage','Rev','Launch','Shift'];
+ const k=n+'|'+msg+'|'+sub;if(el.dataset.k===k)return;el.dataset.k=k;
+ el.innerHTML='<div class="ch">🎓 HOW TO RACE <span>'+steps.map((s,i)=>'<i class="'+(i+1<n?'d':i+1===n?'c':'')+'">'+(i+1<n?'✓':i+1)+' '+s+'</i>').join('')+'</span></div><div class="cm" style="color:'+col+'">'+msg+'</div><div class="cs">'+sub+'</div>';}
+const COACH_CSS=`.st-coach{position:absolute;left:8px;right:8px;top:8px;margin:0 auto;max-width:640px;background:#0b0f14e6;border:2px solid #ffd02b;border-radius:12px;padding:6px 10px;color:#fff;pointer-events:none;z-index:5}
+.st-coach .ch{font-size:11px;font-weight:900;color:#ffd02b;letter-spacing:.4px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.st-coach .ch span{display:flex;flex-wrap:wrap;gap:4px}.st-coach .ch i{font-style:normal;font-weight:700;color:#7b8794;background:#151c25;border-radius:6px;padding:1px 6px}.st-coach .ch i.d{color:#22c55e}.st-coach .ch i.c{color:#111;background:#ffd02b}
+.st-coach .cm{font-size:20px;font-weight:900;margin:3px 0 1px}.st-coach .cs{font-size:13px;color:#cbd5df}
+@media (max-height:520px),(max-width:640px){.st-coach{top:4px;left:4px;right:4px;padding:3px 7px}.st-coach .ch span{display:none}.st-coach .cm{font-size:14px;margin:1px 0}.st-coach .cs{font-size:11px}}`;
+(()=>{const s=document.createElement('style');s.textContent=COACH_CSS;document.head.appendChild(s);})();
 function tick(R,dt){
  const st=R.st,me=R.me,op=R.op;R.t+=dt;R.msgs.forEach(m=>m.age+=dt);R.msgs=R.msgs.filter(m=>m.age<1.8);
  if(R.flame>0)R.flame-=dt;if(R.purgeT>0)R.purgeT-=dt;if(R.opPurgeT>0)R.opPurgeT-=dt;
@@ -8891,7 +8931,7 @@ function tick(R,dt){
  if(!me.launched){
   if(R.burnHeld&&me.stg===0){me.tt=Math.min(430,me.tt+dt*(35+25*Math.min(1.5,st.hp/400))*(st.tOpt/180)*(st.heat||1));me.rpm=st.ev?st.red*.3:st.red*.8+Math.sin(R.t*40)*st.red*.04;for(let i=0;i<4;i++)R.parts.push(smoke(me.x-BODIES[CARS[R.b.car].body].len*.82,.55,false,true));R.eng&&R.eng.set(me.rpm,.9,.6);}
   else{cool(me);
-   const cap=(st.lbw>0||R.easy)&&me.stg>=2?(R.band[0]+R.band[1])/2:st.red;
+   const cap=(st.lbw>0||R.easy)&&me.stg>=2?(R.band[0]+R.band[1])/2:R.coach&&me.stg>=2?R.band[1]-(R.band[1]-R.band[0])*.25:st.red;
    if((S.auto||R.easy)&&me.stg>=2)me.rpm+=((R.band[0]+R.band[1])/2-me.rpm)*Math.min(1,dt*4);
    else me.rpm=Math.max(900,Math.min(cap,me.rpm+(me.held?st.red*.55:-st.red*.75)*dt));
    R.eng&&R.eng.set(me.rpm,me.held?.8:.15,.2);}
@@ -8923,7 +8963,9 @@ function tick(R,dt){
   R.oeng&&R.oeng.set(op.rpm,.5,.3);}
  // ---- tree: starts a random moment after both lanes are staged ----
  const ready=me.stg>=2&&(!op||op.stg>=2)&&me.x>=me.target-.01&&(!op||op.x>=op.target-.01);
- if(ready&&!R.armAt)R.armAt=R.t+.6+Math.random()*1.1;
+ if(ready&&!R.stagedAt)R.stagedAt=R.t;
+ const revOk=!R.coach||S.auto||st.ev||(me.rpm>=R.band[0]&&me.rpm<=R.band[1])||R.t-R.stagedAt>7;
+ if(ready&&!R.armAt&&revOk)R.armAt=R.t+(R.coach?.9:.6)+Math.random()*1.1;
  if(R.armAt&&!R.treeAt&&R.t>=R.armAt)startTree(R);
  if(R.treeAt){for(const [green,key] of [[R.meGreen,'_bm'],[R.opGreen,'_bo']]){const lit=treeLit(R,green);const n=lit.slice(0,3).filter(Boolean).length+(lit[3]?10:0);if(n!==R[key]){if(key==='_bm'||!R.bracket){if(lit[3])beep(true);else if(n>(R[key]||0))beep(false);}R[key]=n;}}}
  // ---- physics for launched cars ----
@@ -8984,7 +9026,6 @@ function finishRace(R){
    if(R.arg.crew){const [ci,ri]=R.arg.crew;if(S.crews[ci]===ri){S.crews[ci]++;if(R.opp.boss){res.boss=true;if(ci===0)trophy('crew1');if(ci===3)trophy('crew3');if(ci===4)trophy('crew5');}}else{const m=rematchMult('c'+ci+'-'+ri,true);res.reward=Math.round(res.reward*m);res.rep=Math.round(res.rep*m);res.rematch=Math.round(m*100);}}
    if(R.arg.ladder){const p=R.arg.ladder;if(p<S.ladder){S.ladder=p;res.climb=p;if(p<=5)trophy('list5');if(p===1)trophy('list1');}else{const m=rematchMult('L'+p,true);res.reward=Math.round(res.reward*m);res.rep=Math.round(res.rep*m);res.rematch=Math.round(m*100);}}
    if(R.bracket&&Math.abs(et-R.bracket.dial)<=.02)trophy('bracket');
-   if(S.pro&&!S.auto){res.reward=Math.round(res.reward*1.25);res.proBonus=true;}
    if(S.auto){res.reward=Math.round(res.reward/2);res.rep=Math.round(res.rep/2);res.autoHalf=true;}
    earn(res.reward,'race win');addRep(res.rep);cha();burst('crowd');}
   else{S.losses++;res.rep=8;addRep(8);}}
@@ -9371,8 +9412,9 @@ window.__stBridge={importGarage,exportGarage,RULES};
    Each step checks the save, so it ticks itself off as soon as you do the thing. */
 const anyCar=f=>Object.values(S.cars||{}).some(f);
 const GUIDE=[
- {id:'car',title:'Pick your first car',how:'Choose one of the three starter cars. It is free.',go:'hub',check:()=>!!S.active,cash:0},
- {id:'race1',title:'Win your first street race',how:'Open Race and take on the first racer in Parking Lot Rookies. Hold BURNOUT until the tire gauge is green, roll up, then shift when the bar turns green. A win pays your first Street cash.',go:'race',hl:'[data-act=crewrace]',check:()=>(S.wins||0)>=1,cash:0},
+ {id:'car',title:'Pick your first car',how:'Look at the three starter cars and tap PICK THIS CAR under the one you like. It is free.',check:()=>!!S.active,cash:0},
+ {id:'gorace',title:'Go to the drag race',how:'Tap 🏁 Race at the top of the screen (or tap SHOW ME). That is where you race other cars for cash.',go:'race',nav:'race',check:()=>!!(S.seen&&S.seen.raceScreen)||(S.wins||0)>=1,cash:0},
+ {id:'race1',title:'Win your first street race',how:'Under Parking Lot Rookies, tap RACE on the first racer. The race coach at the top of the screen tells you exactly what to press: burnout, roll up, stage, rev, launch on green, then shift. A win pays your first Street cash.',go:'race',hl:'[data-act=crewrace]',check:()=>(S.wins||0)>=1,cash:0},
  {id:'part',title:'Buy your first upgrade',how:'Open the Garage. A cheap first mod: on the Weight reduction tab, tap Spare tire delete, then BUY. Less weight means a quicker car. Save up for engine parts next.',go:'garage',cat:'weight',hl:'[data-act=opt][data-s=spare][data-o=del]',check:()=>!!(S.trophies&&S.trophies.firstmod),cash:100},
  {id:'tires',title:'Launch with your tires in the GREEN',how:'In a race, hold BURNOUT and watch the TIRE TEMP gauge. Stop when the needle sits in the small green zone, then roll up. Green tires give full grip.',go:'race',hl:'[data-act=crewrace]',check:()=>!!(S.seen&&S.seen.greenLaunch),cash:100},
  {id:'shift',title:'Hit a perfect shift',how:'Shift while the needle is inside the small green zone on the shift bar. Too early bogs the engine, too late hits the limiter.',go:'race',hl:'[data-act=crewrace]',check:()=>((S.stats&&S.stats.perfect)||0)>=1,cash:100},
@@ -9392,9 +9434,12 @@ function guideTick(){const g=guideState();let changed=false;
  if(!g.allDone&&GUIDE.every(s=>g.done[s.id])){g.allDone=1;save();setTimeout(()=>toastST('🏆 Guide complete! You know everything you need. Go build a monster.'),2800);}
  renderGuide();}
 function renderGuide(){if(!root)return;let el=root.querySelector('#stGuide');const g=guideState();const s=guideNext();setTimeout(()=>root.classList.toggle('st-has-guide',!!root.querySelector('#stGuide')),0);
- const hideNow=!s||g.hide||screen==='racing'||!S.active||!!root.querySelector('#stRace');
- if(hideNow){if(el)el.remove();if(!s||!S.active)return;if(g.hide&&!root.querySelector('#stRace'))guideTab();else{const t=root.querySelector('#stGuideTab');if(t)t.remove();}return;}
+ const pickNow=!S.active&&screen==='pick';
+ const hideNow=!s||g.hide||screen==='racing'||(!S.active&&!pickNow)||!!root.querySelector('#stRace');
+ if(hideNow){if(el)el.remove();if(!s||!S.active&&!pickNow)return;if(g.hide&&!root.querySelector('#stRace'))guideTab();else{const t=root.querySelector('#stGuideTab');if(t)t.remove();}return;}
  const t=root.querySelector('#stGuideTab');if(t)t.remove();
+ root.querySelectorAll('[data-nav].st-glow').forEach(b=>b.classList.remove('st-glow'));if(s.nav){const nb=root.querySelector('[data-nav='+s.nav+']');if(nb)nb.classList.add('st-glow');}
+ if(pickNow)body.querySelectorAll('[data-act=pick]').forEach(b=>b.classList.add('st-glow'));
  const n=GUIDE.indexOf(s)+1;
  if(!el){el=document.createElement('div');el.id='stGuide';el.className='st-guide';root.appendChild(el);}
  const html='<div class="gtop"><b>📋 Step '+n+' of '+GUIDE.length+'</b><span><button data-act="guidelist" title="All steps">☰</button><button data-act="guidehide" title="Hide the guide">✕</button></span></div><div class="gt">'+escH(s.title)+'</div><div class="gh">'+escH(s.how)+'</div>'+(s.go?'<button class="st-btn go gs" data-act="guidego">👉 SHOW ME</button>':'')+(s.cash?'<span class="gr">Reward: '+money(s.cash)+'</span>':'');
@@ -9416,7 +9461,7 @@ const GUIDE_CSS=`.st-guide{position:absolute;left:12px;bottom:12px;z-index:9050;
 .st-glow{outline:3px solid #ffd02b!important;outline-offset:2px;animation:stGlow 1s ease-in-out infinite}@keyframes stGlow{50%{outline-color:#ff8a2b;box-shadow:0 0 18px #ffd02b}}
 @media (max-height:520px),(max-width:640px){.st-guide{width:auto;max-width:62vw;padding:4px 8px;font-size:11px;bottom:6px;left:6px;display:flex;align-items:center;gap:8px;border-width:1.5px}.st-guide .gtop b{display:none}.st-guide .gtop{order:3}.st-guide .gt{font-size:12px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34vw}.st-guide .gh,.st-guide .gr{display:none}.st-guide .gs{margin:0;padding:5px 9px;font-size:11px;white-space:nowrap}.st-has-guide .st-body>*:last-child{margin-bottom:46px}}`;
 (()=>{const st=document.createElement('style');st.textContent=GUIDE_CSS;document.head.appendChild(st);})();
-{const _go=go;go=function(s,a){_go(s,a);try{guideTick();}catch(e){}};}
+{const _go=go;go=function(s,a){if(s==='race'&&S.active){S.seen=S.seen||{};S.seen.raceScreen=1;}_go(s,a);try{guideTick();}catch(e){}};}
 setInterval(()=>{try{if(root&&root.style.display!=='none')guideTick();}catch(e){}},1200);
 })();
 
