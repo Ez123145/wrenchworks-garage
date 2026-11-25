@@ -1,5 +1,5 @@
 /* WrenchWorks Garage offline support. The game page is fetched fresh when online and cached for offline play. */
-const CACHE='wrenchworks-v41';
+const CACHE='wrenchworks-v42';
 const LOCAL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./maskable-512.png'];
 const CDN=['https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js?wwg=7.0','https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js?wwg=7.0'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(async c=>{await c.addAll(LOCAL);for(const u of CDN){try{await c.add(new Request(u,{mode:'no-cors'}));}catch(err){}}}).then(()=>self.skipWaiting()));});
