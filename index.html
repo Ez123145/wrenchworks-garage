@@ -1941,7 +1941,7 @@ function buildTools(){
  wwRenderToolDrawers();
 }
 function startGame(i){if(E){E=false;cash=bank.cash;xp=bank.xp;$('#rc').style.display='none'}D=DIFFS[i];if(!started){cash=600;xp=0;started=true}showL=D.lab===2;buildTools();$('#plh').style.display=$('#pl').style.display=D.list?'':'none';$('#lb').style.display=D.lab?'':'none';$('#lb').classList.toggle('on',showL);$('#lv').textContent=D.n;$('#start').style.display='none';load(-1); /* The career menu already selected the contract; do not reopen the board here. */}
-function showStart(){$('#modal').classList.remove('show');const st=$('#start');st.style.display='flex';st.innerHTML='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V39</small></h1><div class="mu" style="margin-bottom:14px">Select difficulty tier to begin:</div>'+DIFFS.map((d,i)=>'<button class="card-select" data-d="'+i+'"><b>'+(i+1)+'. '+d.n+'</b><span>'+d.d+'</span><i>'+availTools(d).length+' tools · '+d.pool.length+' jobs · pay ×'+d.pm+'</i></button>').join('')+'<button class="card-select" data-d="x"><b>Sandbox Mode</b><span>Free play with sandbox inventory. Garage upgrades, including the two-post lift, still require purchase.</span><i>'+availTools(EXPD).length+' available tools · sandbox</i></button>'+(started?'<button class="card-select rs" data-d="r">Reset saved progress</button>':'');}
+function showStart(){$('#modal').classList.remove('show');const st=$('#start');st.style.display='flex';st.innerHTML='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V40</small></h1><div class="mu" style="margin-bottom:14px">Select difficulty tier to begin:</div>'+DIFFS.map((d,i)=>'<button class="card-select" data-d="'+i+'"><b>'+(i+1)+'. '+d.n+'</b><span>'+d.d+'</span><i>'+availTools(d).length+' tools · '+d.pool.length+' jobs · pay ×'+d.pm+'</i></button>').join('')+'<button class="card-select" data-d="x"><b>Sandbox Mode</b><span>Free play with sandbox inventory. Garage upgrades, including the two-post lift, still require purchase.</span><i>'+availTools(EXPD).length+' available tools · sandbox</i></button>'+(started?'<button class="card-select rs" data-d="r">Reset saved progress</button>':'');}
 
 $('#start').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.d===undefined)return;if(b.dataset.d==='r'){if(confirm('Erase saved cash, XP, upgrades and badges?')){try{localStorage.removeItem('wwg1');localStorage.removeItem('wwg-scrap-v67')}catch(x){}location.reload()}}else if(b.dataset.d==='x'){startExp()}else{const tier=Number(b.dataset.d);if(Number.isInteger(tier)&&DIFFS[tier])startGame(tier);}});
 $('#pl').innerHTML=Object.keys(parts).filter(n=>n!=='2-Post Lift'&&n!=='2-Post Hydraulic Lift').sort((a,b)=>{const order=['Hood','Battery','Positive terminal','Negative terminal'];const ai=order.indexOf(a),bi=order.indexOf(b);return (ai<0?999:ai)-(bi<0?999:bi)||a.localeCompare(b)}).map(n=>'<button data-n="'+n+'">'+n+'</button>').join('');
@@ -3009,7 +3009,7 @@ function wwSettingsModal(){
 
 let wwClassChosenThisVisit=false, wwJobChosenThisVisit=false;
 function wwMenu(){ $('#modal').classList.remove('show'); const st=$('#start'); st.style.display='flex'; const step=WW_MERGE.step;
- const head='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V39</small></h1><div style="color:var(--mu);margin:6px 0 16px">CAREER GARAGE · BALANCED REALISM</div><div style="display:flex;gap:8px;margin-bottom:18px">'+[1,2].map(n=>'<button class="'+(step===n?'on':'')+'" data-step="'+n+'">STEP '+n+'</button>').join('')+'</div>';
+ const head='<h1>WRENCH<i>WORKS</i> GARAGE <small style="font-size:12px;letter-spacing:1px;color:var(--mu)">V40</small></h1><div style="color:var(--mu);margin:6px 0 16px">CAREER GARAGE · BALANCED REALISM</div><div style="display:flex;gap:8px;margin-bottom:18px">'+[1,2].map(n=>'<button class="'+(step===n?'on':'')+'" data-step="'+n+'">STEP '+n+'</button>').join('')+'</div>';
  let body='';
  if(step===1){body=(WW_MERGE.levelCompletionNotice?'<div class="row-card" style="border:2px solid var(--ac);margin-bottom:14px;background:rgba(255,180,50,.09)"><div><b>LEVEL COMPLETED: '+WW_MERGE.levelCompletionNotice.completed+'</b><span class="mu">You completed every job in this mechanic level.</span>'+(WW_MERGE.levelCompletionNotice.next?'<span class="mu" style="display:block;color:var(--ac);font-weight:800;margin-top:5px">NEXT LEVEL UNLOCKED: '+WW_MERGE.levelCompletionNotice.next+'</span>':'<span class="mu" style="display:block;color:var(--ac);font-weight:800;margin-top:5px">ALL CAREER LEVELS COMPLETED</span>')+'</div></div>':'')+'<h2 style="margin:0 0 12px">1. Choose your mechanic class</h2>'+WW_CLASSES.slice(0,5).map((n,i)=>{const locked=!wwClassUnlocked(i);return '<button class="card-select" data-class="'+i+'" '+(locked?'disabled':'')+' style="opacity:'+(locked?'.5':'1')+';border-color:'+(wwClassChosenThisVisit&&WW_MERGE.cls===i?'var(--ac)':'var(--bd)')+'"><b>'+n+'</b><span>'+(i===0?'Begin with basic battery, tire, oil-service and inspection contracts.':i===1?'A separate set of cooling, brake and wheel-end service jobs.':i===2?'New charging, ignition, starter and engine-performance diagnosis jobs.':i===3?'Advanced transmission, steering and cooling-system diagnosis contracts.':'The toughest specialist diagnostics: engine condition, fuel delivery, electrical systems and transmission performance.')+'</span><i>'+(locked?'LOCKED · COMPLETE EVERY '+WW_CLASSES[i-1].toUpperCase()+' JOB FIRST':'CAREER RANK '+(i+1)+' · '+DIFFS[i].pool.length+' CONTRACTS · UNLOCKED')+'</i></button>';}).join('')+'<div class="row-card"><div><b>Reference vehicle</b><span class="mu">2001 Ford Ranger · This is the vehicle currently modeled in the garage.</span></div></div>'+'<button class="card-select" data-sandbox-select><b>🧰 Sandbox Mode</b><span>Play however you want: the free garage and your build, any repair job, and Street Tuner drag racing and car shows. Nothing here changes your career save.</span><i>FREE GARAGE & BUILDS · PICK A JOB · STREET TUNER</i></button>'
  } else if(WW_MERGE.cls===5){body='<h2 style="margin:0 0 12px">2. Enter Sandbox</h2><div class="mu" style="margin-bottom:12px">Free practice has no customer contract and gives you an unrestricted workbench. Parts inventory is unlimited in this mode. Permanent garage equipment is separate: the two-post lift, LED floodlights and deluxe tool chest still have to be purchased with saved Career garage funds.</div><button class="card-select" data-sandbox><b>ENTER EXPERIMENT / SANDBOX</b><span>Start free practice in the garage. An unpurchased two-post lift remains hidden and locked.</span><i>NO JOB ACTIVE · FREE PRACTICE</i></button>';
@@ -8345,9 +8345,9 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function newCar(id){const c=CARS[id];const pre=c.preset||{};const owned={};for(const k in pre)owned[k]=[pre[k]];return {_v36:1,car:id,parts:Object.assign({},pre),owned,paint:{c:c.color,finish:'gloss',wrap:'none',wrapC:'#ffffff',glow:GLOWS[0],cal:CALIPERS[1],rim:null,num:String(10+Math.floor(Math.random()*89)),plate:'WRENCH'},paintOwned:{finish:['gloss'],wrap:['none']},air:false};}
 const cur=()=>S.cars[S.active];
 const level=()=>levelOf(S.rep);
-function addRep(n){const before=level();S.rep+=n;const after=level();if(after>before){cha();setTimeout(()=>levelUp(after),900);}}
+function addRep(n){if(S.creative)return;const before=level();S.rep+=n;const after=level();if(after>before){cha();setTimeout(()=>levelUp(after),900);}}
 function levelUp(L){const un=[];SLOTS.forEach(s=>s.opts.forEach(o=>{if(o.lvl===L)un.push(o.name);}));const m=document.createElement('div');m.className='st-modal';m.style.zIndex=9200;m.innerHTML='<div class="st-card" style="max-width:520px;text-align:center"><div style="font-size:54px">⭐</div><h2 style="margin:4px 0;font-size:34px;color:#ffd02b">LEVEL UP! Rep level '+L+'</h2><p style="color:#cbd5df">New parts unlocked in the garage:</p><div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0 14px">'+un.slice(0,14).map(n=>'<span class="st-pill" style="font-size:14px">🔓 '+escH(n)+'</span>').join('')+(un.length>14?'<span class="st-pill">+'+(un.length-14)+' more</span>':'')+'</div><button class="st-btn go" data-nav="garage" onclick="this.closest(\'.st-modal\').remove()">GO TO THE GARAGE</button> <button class="st-btn alt" onclick="this.closest(\'.st-modal\').remove()">LATER</button></div>';body.appendChild(m);burst('crowd',1.2);}
-function earn(n,why){S.cash+=n;S.stats.earned+=n;if(n>0)toastST('+'+money(n)+(why?' · '+why:''));}
+function earn(n,why){if(S.creative)return;S.cash+=n;S.stats.earned+=n;if(n>0)toastST('+'+money(n)+(why?' · '+why:''));}
 function spend(n){if(S.creative)return true;if(S.cash<n){toastST('Not enough Street cash. Win races or car shows to earn more.');sfx('deny');return false;}S.cash-=n;return true;}
 let toastTimer=0;
 function toastST(m){const e=document.getElementById('stToast');if(!e)return;e.textContent=m;e.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('on'),2600);}
@@ -8359,7 +8359,7 @@ const TROPHIES=[
  ['crew1','Rookie crusher','Beat the Parking Lot Rookies boss.'],['crew3','Big block busted','Beat the Big Block Brotherhood boss.'],['crew5','King of the streets','Beat the Neon Syndicate boss.'],
  ['show1','Best in show','Win a car show.'],['show5','Show regular','Enter 5 car shows.'],['lifted','Sky high','Put an 8 inch lift on a truck.'],['slammed','Slammed','Air out on bags at a show.'],
  ['garage3','Collector','Own 3 cars.'],['ev','Plugged in','Buy the Volt Sedan.'],['tour','Tournament champ','Win a 3-round tournament.'],['ghost','Beat yourself','Beat your own ghost in a test run.'],['streak7','Regular','Play 7 days in a row.'],['gt','Hypercar','Buy the Hyper GT.'],['style100','Showstopper','Reach 100 style points.'],['rich','Big bank','Have $50,000 at once.']];
-function trophy(id){if(S.trophies[id])return;S.trophies[id]=Date.now();const t=TROPHIES.find(x=>x[0]===id);if(t){toastST('🏆 Trophy: '+t[1]);cha();}save();}
+function trophy(id){if(S.creative||S.trophies[id])return;S.trophies[id]=Date.now();const t=TROPHIES.find(x=>x[0]===id);if(t){toastST('🏆 Trophy: '+t[1]);cha();}save();}
 function checkBuildTrophies(){const b=cur();if(!b)return;const st=computeStats(b);if(st.hp>=500)trophy('hp500');if(st.hp>=1000)trophy('hp1000');if(st.style>=100)trophy('style100');if(optOf(b,'susp').id==='lift8')trophy('lifted');if(Object.keys(S.cars).length>=3)trophy('garage3');if(S.cash>=50000)trophy('rich');S.stats.maxHp=Math.max(S.stats.maxHp,st.hp);}
 
 /* ---------- overlay shell ---------- */
@@ -8437,7 +8437,7 @@ function top(){
  root.querySelector('#stCash').textContent=(S.creative?'∞ ':'')+money(S.cash);
  root.querySelector('#stLvl').textContent='⭐ Rep level '+L;
  root.querySelector('#stRepBar').style.width=(L>=LEVELS.length-1?100:Math.min(100,(S.rep-a)/(b-a)*100))+'%';
- const nav=[['hub','🏠 Hub'],['garage','🔧 Garage'],['dyno','📈 Dyno'],['race','🏁 Race'],['show','🏆 Car show'],['dealer','🚗 Cars'],['trophies','🎖 Trophies'],['settings','⚙'],['music',musicOn()?'🎵':'🔇'],['fullscreen','⛶'],['exit','✖ Exit']];
+ const nav=[['hub','🏠 Hub'],['garage','🔧 Garage'],['dyno','📈 Dyno'],['race','🏁 Race'],['show','🏆 Car show'],['online','🌐 Online'],['dealer','🚗 Cars'],['trophies','🎖 Trophies'],['settings','⚙'],['music',musicOn()?'🎵':'🔇'],['fullscreen','⛶'],['exit','✖ Exit']];
  root.querySelector('#stNav').innerHTML=S.active?nav.map(([k,n])=>'<button data-nav="'+k+'" class="'+(screen===k?'on':'')+'">'+n+'</button>').join(''):'<button data-nav="exit">✖ Exit</button>';
 }
 function go(s,arg){stopEngine();screen=s;drawFn=null;if(window.__stRaceStop)window.__stRaceStop();(SCREENS[s]||SCREENS.hub)(arg);top();save();}
@@ -8483,10 +8483,11 @@ SCREENS.hub=()=>{
  +'<button class="st-tile" data-nav="garage"><i>🔧</i><b>Garage</b><span>'+SLOTS.length+' kinds of parts: turbos, nitrous, lift kits, wings, underglow, wraps and more.</span></button>'
  +'<button class="st-tile" data-nav="race"><i>🏁</i><b>Drag race</b><span>'+(crewIdx<0?'You beat every crew! Quick races and test runs are always open.':'Next up: '+CREWS[crewIdx].name+'. Nail the launch, hit perfect shifts, hit the nitrous.')+'</span></button>'
  +'<button class="st-tile" data-nav="show"><i>🏆</i><b>Car show</b><span>Park next to other builds and let the judges and the crowd decide. Today: '+escH(showsToday()[0].name)+'.</span></button>'
+ +'<button class="st-tile" data-nav="online"><i>🌐</i><b>Play online</b><span>'+(window.WWNet&&WWNet.state==='on'?'You are in a room. Race or show against your friend.':'Race a real friend or battle at a car show. One of you hosts, the other joins with a room code.')+'</span></button>'
  +'<button class="st-tile" data-nav="dyno"><i>📈</i><b>Dyno</b><span>Strap it down and see your real horsepower and torque curves.</span></button>'
  +'<button class="st-tile" data-nav="dealer"><i>🚗</i><b>Cars</b><span>'+Object.keys(S.cars).length+' of '+CAR_ORDER.length+' owned. Buy a muscle car, an SUV, a van or the Hyper GT.</span></button>'
  +'<button class="st-tile" data-nav="junk"><i>🧲</i><b>Junkyard</b><span>Used parts for cheap. New deals every day.</span></button>'
- +'<button class="st-tile" data-act="daily"><i>📅</i><b>Daily challenge</b><span>'+(S.daily.d===today&&S.daily.done?'Done for today. Come back tomorrow!':escH(dailyText()))+'</span></button>'
+ +(S.creative?'':'<button class="st-tile" data-act="daily"><i>📅</i><b>Daily challenge</b><span>'+(S.daily.d===today&&S.daily.done?'Done for today. Come back tomorrow!':escH(dailyText()))+'</span></button>')
  +'</div>';
  drawFn=t=>{const c=body.querySelector('#stHero');if(!c)return;const x=fitCanvas(c);showroom(x,c.width,c.height,t);carOnFloor(x,cur(),c.width,c.height,t,{w:c.width*.56,dx:c.width*.12,y:c.height*.86});};
 };
@@ -8665,7 +8666,8 @@ SCREENS.settings=()=>{
  const gm=typeof window.__stGarageFunds==='function'?window.__stGarageFunds():null;
  body.innerHTML='<div class="st-h">Settings ⚙</div><div class="st-grid">'
  +'<div class="st-card"><b>🎵 Music: '+(musicOn()?'ON':'OFF')+'</b><p style="color:#aab6c3;font-size:14px">Turn the background music on or off. Engine sounds and effects keep playing. You can also tap 🎵 in the top bar.</p><button class="st-btn" data-act="music">TURN '+(musicOn()?'OFF':'ON')+'</button></div>'
- +'<div class="st-card"><b>🎨 Creative mode: '+(S.creative?'ON':'OFF')+'</b><p style="color:#aab6c3;font-size:14px">On: every part and car is free and unlocked, so you can build anything. Off: earn Street cash from races and shows.</p><button class="st-btn" data-act="creative">TURN '+(S.creative?'OFF':'ON')+'</button></div>'
+ +'<div class="st-card"><b>📋 Starter guide: '+(S.guide&&S.guide.skip?'SKIPPED':'ON')+'</b><p style="color:#aab6c3;font-size:14px">The step-by-step checklist for new players. Skip it if you already know how to play.</p><button class="st-btn" data-act="'+(S.guide&&S.guide.skip?'guideon':'guideskip')+'">'+(S.guide&&S.guide.skip?'TURN GUIDE BACK ON':'SKIP GUIDE')+'</button></div>'
+ +'<div class="st-card"><b>🎨 Creative mode: '+(S.creative?'ON':'OFF')+'</b><p style="color:#aab6c3;font-size:14px">On: every part and car is free and unlocked, so you can build anything. Racing becomes free play: no story crews, no The List, no tournaments or daily challenge, and you do not earn rep, levels or trophies. Online you can only play with friends who also have creative mode on.<br>Off: the normal story. Earn Street cash, rep and trophies from races and shows.</p><button class="st-btn" data-act="creative">TURN '+(S.creative?'OFF':'ON')+'</button></div>'
  +'<div class="st-card"><b>⚙ Auto-drive: '+(S.auto?'ON':'OFF')+'</b><p style="color:#aab6c3;font-size:14px">The car does the burnout, stages, launches and shifts for you, but with slow reactions and only good shifts, and race winnings are cut in half. Good for learning.</p><button class="st-btn" data-act="auto">TURN '+(S.auto?'OFF':'ON')+'</button></div>'
  +'<div class="st-card"><b>🔊 Sound: '+(AUD.on?'ON':'OFF')+'</b><p style="color:#aab6c3;font-size:14px">Engine sounds, turbos, horns and the crowd.</p><button class="st-btn" data-act="sound">TURN '+(AUD.on?'OFF':'ON')+'</button></div>'
  +'<div class="st-card"><b>💵 Bring money from your repair shop</b><p style="color:#aab6c3;font-size:14px">Move garage money you earned doing career repairs into Street cash. '+(gm==null?'Open Street Tuner from the sandbox garage to use this.':'Garage money available: <b>'+money(gm)+'</b>')+'</p><button class="st-btn" data-act="transfer" '+(gm?'':'disabled')+'>MOVE $1,000</button> <button class="st-btn alt" data-act="transfer" data-all="1" '+(gm?'':'disabled')+'>MOVE ALL</button></div>'
@@ -8729,7 +8731,7 @@ function quickOpp(target){const me=perfSummary(cur());const seed=Math.floor(Math
 const today=()=>new Date().toISOString().slice(0,10);
 function dailyTarget(){if(S.daily.d!==today()){const me=perfSummary(cur());S.daily={d:today(),done:false,target:+(me.et-.3).toFixed(2)};save();}return S.daily.target;}
 function dailyText(){return 'Run the quarter mile under '+dailyTarget()+'s in a test run. Reward: $600.';}
-handlers.daily=()=>{dailyTarget();if(S.daily.done){toastST('Daily challenge already done. New one tomorrow!');return;}go('racego',{test:true,daily:true,dist:'quarter'});};
+handlers.daily=()=>{if(S.creative)return;dailyTarget();if(S.daily.done){toastST('Daily challenge already done. New one tomorrow!');return;}go('racego',{test:true,daily:true,dist:'quarter'});};
 const pickTrack=()=>TRACKS[Math.floor(Math.random()*TRACKS.length)];
 const fmt3=v=>v==null?'—':(v<0?'-':'')+Math.abs(v).toFixed(3).replace(/^0/,'');
 
@@ -8739,7 +8741,7 @@ function nextRaceCard(){const ci=S.crews.findIndex((n,i)=>n<CREWS[i].racers.leng
 SCREENS.race=()=>{
  const me=perfSummary(cur());const chip=(k,v,lbl,on)=>'<button class="st-btn '+(on?'':'alt')+'" style="padding:6px 12px;font-size:13px" data-act="rset" data-k="'+k+'" data-v="'+v+'">'+lbl+'</button>';
  let h='<div class="st-h">Drag strip 🏁</div><div class="st-sub">Your car: '+escH(CARS[cur().car].name)+' '+clsBadge(me.pi)+' · ¼ mile about '+(+me.et).toFixed(2)+'s @ '+me.trap+' mph. Do a burnout, stage, watch the tree, and launch on green. Your reaction time counts!</div>'
- +nextRaceCard()
+ +(S.creative?'<div class="st-card" style="margin:10px 16px;border:2px solid #b28cff"><b style="font-size:18px;color:#b28cff">🎨 Creative mode: free play</b><div style="color:#cbd5df;font-size:14px;margin-top:4px">Race as much as you want with any build. Story crews, The List, tournaments and the daily challenge are off, and you do not earn rep, levels or trophies. Turn creative mode off in ⚙ Settings to play the story.</div></div>':nextRaceCard())
  +'<div class="st-card" style="margin:10px 16px;display:flex;gap:14px;flex-wrap:wrap;align-items:center"><b>Quick, bracket, test and tournament races:</b><span>Distance '+Object.keys(DISTS).map(k=>chip('dist',k,DISTS[k].name,S.dist===k)).join(' ')+'</span><span>Tree '+chip('tree','sport','Sportsman',S.tree==='sport')+' '+chip('tree','pro','Pro',S.tree==='pro')+'</span><span>Graphics <button class="st-btn '+(S.pixel===false?'alt':'')+'" style="padding:6px 12px;font-size:13px" data-act="pix" data-v="1">👾 Pixel</button> <button class="st-btn '+(S.pixel===false?'':'alt')+'" style="padding:6px 12px;font-size:13px" data-act="pix" data-v="0">✨ Smooth</button></span><div style="flex-basis:100%;color:#aab6c3;font-size:13px">'+(TOUCH?'How to race: hold BURNOUT until the tire gauge is green, tap STAGE twice to roll into the beams, hold GAS in the green zone, tap LAUNCH on green, then tap SHIFT when the bar turns green. Go early and you red light.':'How to race: hold B for a burnout until the tire gauge is green, tap SPACE twice to roll into the beams, hold SPACE to rev in the green zone, press ENTER or ↑ on green, then SPACE to shift when the bar turns green. Go early and you red light.')+' <button class="st-btn '+(coachOn()?'':'alt')+'" style="padding:6px 12px;font-size:13px;margin-left:6px" data-act="coach">🎓 Race coach: '+(coachOn()?'ON':'OFF')+'</button></div></div>'
  +'<div style="display:flex;gap:10px;flex-wrap:wrap;padding:4px 16px 10px">'+(level()<2?'<div style="color:#aab6c3;font-size:14px;padding:10px 4px">🔒 Tournaments, bracket racing and The List unlock at <b>Rep level 2</b>. Win a few crew races first!</div>':'')+'<button class="st-btn" '+(level()<2?'style="display:none" ':'')+'data-act="tour" style="background:#ffd02b;box-shadow:0 4px 0 #b08d14">🏆 TOURNAMENT · 3 rounds · win '+money(tourPrize())+'</button><button class="st-btn go" data-act="quick">⚡ HEADS-UP RACE · win '+money(150+level()*50)+'</button><button class="st-btn" '+(level()<2?'hidden ':'')+'data-act="bracket" style="background:#5aa9ff;box-shadow:0 4px 0 #2b6cb0">🎯 BRACKET RACE · win '+money(bracketPrize())+'</button><button class="st-btn alt" data-act="test">⏱ TEST & TUNE</button><button class="st-btn alt" data-act="howto">❓ HOW TO RACE</button></div>';
  // The List
@@ -8747,15 +8749,15 @@ SCREENS.race=()=>{
  h+='<div class="st-card" style="margin:10px 16px;border-color:#ffd02b"><b style="font-size:19px;color:#ffd02b">📋 THE LIST · Top 10 street racers</b> <span class="st-pill">'+(pos>10?'You are unranked':'You are #'+pos)+'</span><div style="color:#aab6c3;font-size:13px;margin:4px 0 8px">Heads-up, ⅛ mile, Pro tree. Call out the racer one spot above you. Beat them and you take their spot.</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px">';
  for(let p=10;p>=1;p--){const mine=p===pos;const o=ladderOpp(p);const can=p===next;
   h+='<div style="background:'+(mine?'#3a2f10':'#18202a')+';border-radius:10px;padding:7px;border:1px solid '+(can?'#ffd02b':'#27323e')+'"><b>'+(p>pos?'✅ ':'')+(mine?'⭐ YOU (#'+p+')':escH(o.name))+'</b>'+(mine?'':'<div style="font-size:12px;color:#aab6c3">'+escH(CARS[o.build.car].name)+' '+clsBadge(o.pi)+'</div><div style="font-size:12px;color:#7dff9b">Win '+money(o.cash)+'</div>')+(can?'<button class="st-btn" style="margin-top:6px;padding:6px 10px;font-size:12px" data-act="callout" data-p="'+p+'">CALL OUT</button>':'')+'</div>';}
- h+='</div></div>';if(level()<2)h=h.slice(0,hL);
- CREWS.forEach((C,ci)=>{const unlocked=ci===0||S.crews[ci-1]>=CREWS[ci-1].racers.length;const beaten=S.crews[ci];
+ h+='</div></div>';if(level()<2||S.creative)h=h.slice(0,hL);
+ if(!S.creative)CREWS.forEach((C,ci)=>{const unlocked=ci===0||S.crews[ci-1]>=CREWS[ci-1].racers.length;const beaten=S.crews[ci];
   h+='<div class="st-card" style="margin:10px 16px;border-color:'+(unlocked?C.col:'#2c3742')+';opacity:'+(unlocked?1:.5)+'"><b style="font-size:19px;color:'+C.col+'">'+(beaten>=C.racers.length?'👑 ':unlocked?'':'🔒 ')+C.name+'</b> <span class="st-pill">'+beaten+' / '+C.racers.length+' beaten</span> <span class="st-pill">'+DISTS[C.dist].name+' · '+TREES[C.tree].name+'</span>'
   +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:8px">'+C.racers.map((n,ri)=>{const st=ri<beaten?'done':ri===beaten&&unlocked?'next':'lock';
    let extra='';if(st!=='lock'){const o=crewOpp(ci,ri);extra='<div style="font-size:12px;color:#aab6c3">'+escH(CARS[o.build.car].name)+' '+clsBadge(o.pi)+' · '+DISTS[C.dist].short+' mile about '+(+simulate(o.st,{dist:DISTS[C.dist].m,skill:o.skill}).et).toFixed(2)+'s</div><div style="font-size:12px;color:#7dff9b">Win '+money(o.cash)+'</div>';}
    return '<div style="background:#18202a;border-radius:10px;padding:8px;border:1px solid '+(st==='next'?C.col:'#27323e')+'"><b>'+(st==='done'?'✅ ':st==='lock'?'🔒 ':'')+escH(n)+'</b>'+extra+(st==='next'?'<button class="st-btn" style="margin-top:6px;padding:7px 12px;font-size:13px" data-act="crewrace" data-c="'+ci+'" data-r="'+ri+'">RACE</button>':st==='done'?'<button class="st-btn alt" style="margin-top:6px;padding:6px 10px;font-size:12px" data-act="crewrace" data-c="'+ci+'" data-r="'+ri+'">REMATCH · '+money(crewOpp(ci,ri).cash*rematchMult('c'+ci+'-'+ri))+'</button>':'')+'</div>';}).join('')+'</div></div>';});
  if(S.slips.length){h+='<div class="st-card" style="margin:10px 16px"><b>🧾 Your last timeslips</b><table style="width:100%;font-size:13px;margin-top:6px;border-collapse:collapse"><tr style="color:#8fa0b1;text-align:left"><th>Car</th><th>Distance</th><th>R/T</th><th>60 ft</th><th>E.T.</th><th>MPH</th><th></th></tr>'
   +S.slips.slice(-6).reverse().map(s=>'<tr><td>'+escH(CARS[s.car]?CARS[s.car].name:s.car)+'</td><td>'+DISTS[s.d].name+'</td><td>'+(s.red?'<b style="color:#ef4444">RED</b>':fmt3(s.rt))+'</td><td>'+(s.t60!=null?s.t60.toFixed(3):'—')+'</td><td><b>'+s.et.toFixed(3)+'</b></td><td>'+s.mph+'</td><td>'+(s.res||'')+'</td></tr>').join('')+'</table></div>';}
- body.innerHTML=h;
+ body.innerHTML=h;if(S.creative)body.querySelectorAll('[data-act=tour],[data-act=daily]').forEach(e=>e.remove());
 };
 handlers.rset=d=>{S[d.k]=d.v;save();go('race');};
 handlers.ctl=()=>{};
@@ -8765,7 +8767,7 @@ handlers.pix=d=>{S.pixel=d.v==='1';save();go('race');};
 handlers.quick=()=>go('racego',{opp:quickOpp()});
 const tourPrize=()=>1200+level()*250;
 const bracketPrize=()=>300+level()*70;
-handlers.tour=()=>{const me=perfSummary(cur());const opps=[-.05,-.25,-.45].map((d,i)=>{const o=quickOpp(me.et+d);o.skill=[.96,.98,.995][i];o.rtMean=[.14,.1,.06][i];o.redP=.012;o.name=['Round 1: ','Semifinal: ','Final: '][i]+o.name;o.cash=Math.round(o.cash*.4);return o;});go('racego',{opp:opps[0],tour:{round:0,opps,prize:tourPrize(),track:pickTrack()}});};
+handlers.tour=()=>{if(S.creative)return;const me=perfSummary(cur());const opps=[-.05,-.25,-.45].map((d,i)=>{const o=quickOpp(me.et+d);o.skill=[.96,.98,.995][i];o.rtMean=[.14,.1,.06][i];o.redP=.012;o.name=['Round 1: ','Semifinal: ','Final: '][i]+o.name;o.cash=Math.round(o.cash*.4);return o;});go('racego',{opp:opps[0],tour:{round:0,opps,prize:tourPrize(),track:pickTrack()}});};
 handlers.tournext=()=>{const a=RACE&&RACE.arg;if(!a||!a.tour)return go('race');const r=a.tour.round+1;go('racego',{opp:a.tour.opps[r],tour:Object.assign({},a.tour,{round:r})});};
 handlers.test=()=>go('racego',{test:true});
 handlers.crewrace=d=>{const o=crewOpp(+d.c,+d.r);go('racego',{opp:o,crew:[+d.c,+d.r],dist:o.dist,tree:o.tree});};
@@ -8797,7 +8799,7 @@ handlers.howto=()=>{const m=document.createElement('div');m.className='st-modal'
 
 /* ---------- the race itself ---------- */
 let RACE=null;
-window.__stRaceStop=()=>{if(RACE){RACE.stop();RACE=null;}keyH.down=keyH.up=null;};
+window.__stRaceStop=()=>{if(RACE){if(RACE.online&&!RACE.res)NET.send('rq');RACE.stop();RACE=null;}keyH.down=keyH.up=null;};
 const QM=402.34;
 // Tire temperature zones: small GREEN = full grip, wider YELLOW = some grip lost, RED = cold or cooked tires slide a lot.
 const TZ={g:20,y:60};
@@ -8810,7 +8812,7 @@ function newLane(st,amb){const c=makeRunner(st);c.x=-7;c.stg=0;c.tt=amb;c.held=f
 SCREENS.racego=arg=>{
  const b=cur();const st=calibrate(computeStats(b));const opp=arg.opp;
  const dist=arg.dist||(arg.tour?S.dist:arg.opp&&arg.opp.dist)||S.dist,tree=arg.tree||(arg.tour?S.tree:S.tree);const track=arg.track||(arg.tour&&arg.tour.track)||pickTrack();
- const amb=Math.round(track.temp[0]+Math.random()*(track.temp[1]-track.temp[0]));
+ const amb=arg.amb!=null?arg.amb:Math.round(track.temp[0]+Math.random()*(track.temp[1]-track.temp[0]));
  body.innerHTML='<div style="padding:8px;display:flex;flex-direction:column;gap:8px;height:100%"><div class="st-view" style="flex:1;display:flex;align-items:center;justify-content:center;touch-action:none"><canvas id="stRace" data-ar=".5" style="max-height:100%"></canvas><div id="stCoach" class="st-coach"'+(coachOn()?'':' style="display:none"')+'></div></div>'
  +'<div id="stCtl" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'
  +'<button class="st-btn alt" id="stBurn" style="min-width:130px">🔥 BURNOUT<br><small style="font-size:11px">'+(TOUCH?'hold':'hold · B')+'</small></button>'
@@ -8827,6 +8829,7 @@ SCREENS.racego=arg=>{
  const me=R.me,op=R.op;
  R.trace=[];R.ghost=arg.test&&S.ghost&&S.ghost.xs&&S.ghost.xs.length&&(S.ghost.dist||'quarter')===dist?S.ghost:null;
  R.sp=st.gears.map((_,i)=>shiftRpm(st,i));R.band=launchBand(st).map(v=>v*st.red);
+ R.online=arg.online||null;
  if(op){R.opSp=op.st.gears.map((_,i)=>shiftRpm(op.st,i));R.ai={burnAt:.4+Math.random()*1.2,burnLen:1.4+Math.random()*1.2,stageDelay:.4+Math.random()*1.1};}
  R.eng=makeEngine(st,b,1);R.oeng=opp?makeEngine(op.st,opp.build,.32):null;
  R.stop=()=>{R.eng&&R.eng.stop();R.oeng&&R.oeng.stop();};
@@ -8886,6 +8889,7 @@ SCREENS.racego=arg=>{
   const c=$('#stRace');if(!c)return;const ctx=fitCanvas(c);
   if(S.pixel!==false){const k=3.2;const w=Math.round(c.width/k),h=Math.round(c.height/k);const o=R._off||(R._off=document.createElement('canvas'));if(o.width!==w||o.height!==h){o.width=w;o.height=h;}const ox=o.getContext('2d');ox.imageSmoothingEnabled=false;drawRace(ox,w,h,R,t,true);ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(o,0,0,c.width,c.height);hud(ctx,c.width,c.height,R,t);}
   else drawRace(ctx,c.width,c.height,R,t);
+  if(R.online)netRaceSend(R);
   if(R.coach)coachTick(R,btn);};
 };
 /* ----- Race coach: tells a new racer exactly what to press, one step at a time ----- */
@@ -8948,7 +8952,8 @@ function tick(R,dt){
   if(R.meGreen&&R.t>R.meGreen+4&&!me.launched){R.say('Asleep at the tree!','#ef4444');R.launchMe();}
  }
  // ---- opponent before launch ----
- if(op&&!op.launched){const A=R.ai;
+ if(R.online)netRaceApply(R,dt);
+ if(op&&!op.launched&&!R.online){const A=R.ai;
   if(R.t>A.burnAt&&R.t<A.burnAt+A.burnLen&&op.stg===0){op.tt=Math.min(op.st.tOpt+16,op.tt+dt*120);op.rpm=op.st.red*.8;for(let i=0;i<3;i++)R.parts.push(smoke(op.x-3.6,.5,true,true));}
   else{cool(op);op.rpm=op.stg>=2?op.st.red*((launchBand(op.st)[0]+launchBand(op.st)[1])/2)+Math.sin(R.t*9)*150:op.st.red*.25+Math.sin(R.t*7)*200;}
   if(R.t>A.burnAt+A.burnLen+.4&&op.stg===0&&(me.stg>0||R.t>A.burnAt+A.burnLen+6)){op.stg=.5;op.target=-ROLL.shallow-.18;}
@@ -8965,12 +8970,12 @@ function tick(R,dt){
  const ready=me.stg>=2&&(!op||op.stg>=2)&&me.x>=me.target-.01&&(!op||op.x>=op.target-.01);
  if(ready&&!R.stagedAt)R.stagedAt=R.t;
  const revOk=!R.coach||S.auto||st.ev||(me.rpm>=R.band[0]&&me.rpm<=R.band[1])||R.t-R.stagedAt>7;
- if(ready&&!R.armAt&&revOk)R.armAt=R.t+(R.coach?.9:.6)+Math.random()*1.1;
+ if(ready&&!R.armAt&&revOk&&(!R.online||R.online.host)){R.armAt=R.t+(R.coach?.9:.6)+Math.random()*1.1;if(R.online)NET.send('tree',{d:R.armAt-R.t});}
  if(R.armAt&&!R.treeAt&&R.t>=R.armAt)startTree(R);
  if(R.treeAt){for(const [green,key] of [[R.meGreen,'_bm'],[R.opGreen,'_bo']]){const lit=treeLit(R,green);const n=lit.slice(0,3).filter(Boolean).length+(lit[3]?10:0);if(n!==R[key]){if(key==='_bm'||!R.bracket){if(lit[3])beep(true);else if(n>(R[key]||0))beep(false);}R[key]=n;}}}
  // ---- physics for launched cars ----
  const n=Math.max(1,Math.round(dt*240)),h=dt/n;
- for(let i=0;i<n;i++){for(const c of op?[me,op]:[me]){if(!c.launched)continue;const isMe=c===me;
+ for(let i=0;i<n;i++){for(const c of op?[me,op]:[me]){if(!c.launched)continue;const isMe=c===me;if(!isMe&&R.online)continue;
   if(!c.rec.fin){
    if(isMe)c.thr=R.lift?.15:1;else if(R.bracket&&c.x>R.D*.82&&c.v>1){const proj=(R.t-c.rec.left)+(R.D-c.x)/c.v;c.thr=proj<R.bracket.opDial+.004?.25:1;}
    stepRunner(c,h);
@@ -8990,9 +8995,10 @@ function tick(R,dt){
  if(me.launched){R.eng&&R.eng.set(me.rpm,me.rec.fin?.1:me.shiftT>0?.2:me.thr,me.spool);}
  if(op&&op.launched&&R.oeng)R.oeng.set(op.rpm,op.rec.fin?.1:op.shiftT>0?.2:1,op.spool);
  stepParts(R,dt);
- if(me.rec.fin&&!R.finT){R.finT=R.t;R.phase='finish';}
+ if(me.rec.fin&&!R.finT){R.finT=R.t;R.phase='finish';if(R.online)NET.send('fin',{rec:{rt:me.rec.rt,sp:me.rec.sp,mph:me.rec.mph,et:me.rec.et,trap:me.rec.trap},red:me.red?1:0});}
  if(R.finT){
-  if(op&&!op.rec.fin&&R.t-R.finT>2.5){// fast-forward a slow opponent
+  if(R.online&&op&&!op.rec.fin&&R.t-R.finT>25)netOppGone(R,'Your friend did not finish.');
+  if(op&&!op.rec.fin&&R.t-R.finT>2.5&&!R.online){// fast-forward a slow opponent
    if(!op.launched){op.launched=true;op.launchAt=R.t;op.launchRpm=op.st.red*.5;op.gripK=1;}
    let k=0;while(!op.rec.fin&&k<120*60){stepRunner(op,1/120);if(op.rpm>=R.opSp[op.gear]*.95&&op.shiftT<=0)shift(op);if(op.rec.left==null&&op.x>=0){op.rec.left=R.t;op.rec.rt=R.t-R.opGreen;}if(op.x>=R.D){op.rec.fin=R.t+1;op.rec.et=Math.max(op.t,.1);op.rec.trap=Math.round(op.v*2.237);}k++;}}
   if((!op||op.rec.fin)&&!R.res&&R.t-R.finT>1.4)finishRace(R);
@@ -9022,16 +9028,17 @@ function finishRace(R){
  S.races++;if(!res.red&&R.dist==='quarter'&&(!S.best||et<S.best.et))S.best={et:+et.toFixed(2),trap,car:R.b.car};
  if(!res.red){if(rt>=0&&rt<.01)trophy('rt000');if(rt>=0&&rt<.05)trophy('rt050');if(S.bestRt==null||(rt>=0&&rt<S.bestRt))S.bestRt=rt;}
  if(R.dist==='quarter'&&!res.red){if(et<12)trophy('sub12');if(et<10)trophy('sub10');if(et<8)trophy('sub8');}
- if(op){if(win){S.wins++;trophy('win1');if(R.b.car==='kei')trophy('keiwin');if(S.wins>=10)trophy('win10');res.reward=R.opp.cash;res.rep=R.opp.rep;if(me.stg===3)trophy('deep');if(R.dist==='half')trophy('halfmile');
+ if(op){if(win){S.wins++;trophy('win1');if(R.b.car==='kei')trophy('keiwin');if(S.wins>=10)trophy('win10');res.reward=R.opp.cash;res.rep=R.opp.rep;if(R.online)netPaid();if(me.stg===3)trophy('deep');if(R.dist==='half')trophy('halfmile');
    if(R.arg.crew){const [ci,ri]=R.arg.crew;if(S.crews[ci]===ri){S.crews[ci]++;if(R.opp.boss){res.boss=true;if(ci===0)trophy('crew1');if(ci===3)trophy('crew3');if(ci===4)trophy('crew5');}}else{const m=rematchMult('c'+ci+'-'+ri,true);res.reward=Math.round(res.reward*m);res.rep=Math.round(res.rep*m);res.rematch=Math.round(m*100);}}
    if(R.arg.ladder){const p=R.arg.ladder;if(p<S.ladder){S.ladder=p;res.climb=p;if(p<=5)trophy('list5');if(p===1)trophy('list1');}else{const m=rematchMult('L'+p,true);res.reward=Math.round(res.reward*m);res.rep=Math.round(res.rep*m);res.rematch=Math.round(m*100);}}
    if(R.bracket&&Math.abs(et-R.bracket.dial)<=.02)trophy('bracket');
    if(S.auto){res.reward=Math.round(res.reward/2);res.rep=Math.round(res.rep/2);res.autoHalf=true;}
    earn(res.reward,'race win');addRep(res.rep);cha();burst('crowd');}
-  else{S.losses++;res.rep=8;addRep(8);}}
+  else{S.losses++;res.rep=8;addRep(8);if(R.online){res.reward=NET_LOSS;earn(NET_LOSS,'online race');}}}
  else{res.rep=10;addRep(10);if(R.arg.daily&&!res.red&&et<S.daily.target&&!S.daily.done){S.daily.done=true;res.daily=true;earn(600,'daily challenge');addRep(100);cha();}
   if(!res.red&&(!S.ghost||(S.ghost.dist||'quarter')!==R.dist||et<S.ghost.et)){if(S.ghost&&(S.ghost.dist||'quarter')===R.dist)trophy('ghost');res.newGhost=true;S.ghost={et:+et.toFixed(3),dist:R.dist,car:R.b.car,build:{car:R.b.car,parts:Object.assign({},R.b.parts),paint:Object.assign({},R.b.paint),air:false},xs:R.trace.slice(0,900)};}}
  if(R.arg.tour){const T=R.arg.tour;if(win&&T.round===2){res.champ=true;earn(T.prize,'tournament champion');addRep(250);trophy('tour');}else if(win)res.nextRound=true;else res.out=true;}
+ if(S.creative){res.reward=0;res.rep=0;res.daily=false;}
  S.slips.push({car:R.b.car,d:R.dist,rt,t60:t60!=null?+t60.toFixed(3):null,et,mph:trap,red:res.red,res:op?(win?'W':'L'):'test'});if(S.slips.length>30)S.slips=S.slips.slice(-30);
  {const car=R.b;car.dirt=Math.min(1,(car.dirt||0)+.08+(R.burned?.06:0));car.shine=false;}
  save();top();showSlip(R,res);
@@ -9067,7 +9074,7 @@ function showSlip(R,res){
  +'</div></div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px">'+(res.nextRound?'<button class="st-btn go" data-act="tournext">NEXT ROUND ▶</button>':'<button class="st-btn go" data-act="again">'+(R.arg.tour?'NEW TOURNAMENT':'RACE AGAIN')+'</button>')+(res.up?'<button class="st-btn" style="background:#ffd02b;box-shadow:0 4px 0 #b08d14" data-act="gobuy" data-s="'+res.up.slot+'" data-o="'+res.up.id+'">🔧 UPGRADE: '+escH(res.up.name)+'</button>':'')+'<button class="st-btn" data-nav="race">RACE MENU</button><button class="st-btn alt" data-nav="garage">GARAGE</button></div></div>';
  body.appendChild(m);
 }
-handlers.again=()=>{const a=RACE&&RACE.arg;if(!a)return go('race');if(a.tour)return handlers.tour();if(a.bracket)return go('bracketset');if(a.opp&&a.opp.quick)go('racego',{opp:quickOpp()});else go('racego',Object.assign({},a,{track:null}));};
+handlers.again=()=>{const a=RACE&&RACE.arg;if(!a)return go('race');if(a.online){document.querySelectorAll('.st-modal').forEach(m=>m.remove());return handlers.netinv({m:'race',d:a.dist});}if(a.tour)return handlers.tour();if(a.bracket)return go('bracketset');if(a.opp&&a.opp.quick)go('racego',{opp:quickOpp()});else go('racego',Object.assign({},a,{track:null}));};
 /* ---------- race drawing ---------- */
 const SPONSORS=['WRENCHWORKS','NITRO JOE\'S','TORQUE KING','SLICK TIRE CO','BOOST CITY','REDLINE OIL','2-STEP PARTS','LAUNCH PAD'];
 function drawRace(ctx,W,H,R,t,noHud){
@@ -9249,11 +9256,12 @@ const dirtWord=d=>!d||d<.08?'spotless ✨':d<.3?'a little dusty':d<.6?'dirty':'f
 handlers.detail=d=>{S.detail=d.d;save();go('show');};
 handlers.enter=d=>{const me=cur();const det=DETAIL.find(x=>x.id===(S.detail||'none'))||DETAIL[0];if(det.price){if(!spend(det.price))return;if(det.id==='wash'){me.dirt=Math.min(me.dirt||0,.12);me.shine=false;}else{me.dirt=0;me.shine=true;}save();toastST('🧽 '+det.name+' done. Looking fresh!');}go('showgo',SHOWS.find(s=>s.id===d.s));};
 SCREENS.showgo=show=>{
- const me=cur();const seed=Math.floor(Math.random()*1e6);
- const others=[];for(let i=0;i<5;i++)others.push({name:['Marco','Jess','DJ Turbo','Grandpa Gus','Kayla','Rico','Lena','Bo','Tasha','Wes'][(seed+i*3)%10],build:randomBuild(seed+i*17,show.theme,null,show.rookie?0:Math.min(10,Math.max(1,level()+Math.floor(Math.random()*4)-1)))});
+ const me=cur();const NETS=show._net||null;const seed=NETS?NETS.seed:Math.floor(Math.random()*1e6);const _rnd=Math.random;if(NETS)Math.random=rng(NETS.seed+7);
+ const others=[];if(!NETS)for(let i=0;i<5;i++)others.push({name:['Marco','Jess','DJ Turbo','Grandpa Gus','Kayla','Rico','Lena','Bo','Tasha','Wes'][(seed+i*3)%10],build:randomBuild(seed+i*17,show.theme,null,show.rookie?0:Math.min(10,Math.max(1,level()+Math.floor(Math.random()*4)-1)))});
  const sig=JSON.stringify([me.car,me.parts,me.paint.c,me.paint.finish,me.paint.wrap,!!me.air]);
- const repeat=S.shows.lastSig===sig;
- const entries=[{name:'YOU',me:true,build:me},...others].map(e=>{const s=scoreBuild(e.build,show);let base=s.total;if(e.me&&repeat)base*=.7;return Object.assign(e,{s,base});});
+ const repeat=!NETS&&S.shows.lastSig===sig;
+ const list=NETS?[...NETS.players.map((p,i)=>({name:i===NETS.meIdx?'YOU':p.name,me:i===NETS.meIdx,friend:i!==NETS.meIdx,build:p.build})),...NETS.ai.map(a=>({name:a.name,build:a.build}))]:[{name:'YOU',me:true,build:me},...others];
+ const entries=list.map(e=>{const s=scoreBuild(e.build,show);let base=s.total;if(e.me&&repeat)base*=.7;return Object.assign(e,{s,base});});
  // judges grade on a curve: compared with the other cars at this show, and weighted toward the show theme
  const mx=k=>Math.max(1,...entries.map(e=>k==='base'?e.base:(e.s.c[k]||0)));const themeKeys=Object.keys(show.bias||{});
  const carFit=e=>show.cars?(show.cars.includes(e.build.car)?.3:-.15):0;
@@ -9264,6 +9272,7 @@ SCREENS.showgo=show=>{
   e.sheet=e.judges.reduce((a,v)=>a+v,0);
   e.crowd=Math.round(40*rel+30*th+e.s.c.bass*3+e.s.c.lights*1.2+e.s.c.sound+Math.random()*12);
   e.score=e.sheet+e.crowd*.12;});
+ Math.random=_rnd;
  const ranked=entries.slice().sort((a,b)=>b.score-a.score);const place=ranked.findIndex(e=>e.me);
  body.innerHTML='<div style="padding:10px"><div class="st-view"><canvas id="stShow" data-ar=".46"></canvas></div><div id="stShowPanel" class="st-card" style="margin-top:10px"></div></div>';
  const panel=body.querySelector('#stShowPanel');let stage=0;const T0=performance.now();
@@ -9284,7 +9293,7 @@ SCREENS.showgo=show=>{
    drawCar(x,e.build,{x:xx,y:yy,w,t,st:e.s.st});
    const tagY=yy+H*.01;
    x.fillStyle='rgba(0,0,0,.55)';x.fillRect(xx-4,tagY,w+8,H*.075);
-   x.fillStyle=e.me?'#ff8a2b':'#fff';x.font='800 '+(H*.03|0)+'px Arial';x.textAlign='left';x.fillText((e.me?'⭐ ':'')+e.name+' · '+CARS[e.build.car].name,xx,tagY+H*.03);
+   x.fillStyle=e.me?'#ff8a2b':e.friend?'#5aa9ff':'#fff';x.font='800 '+(H*.03|0)+'px Arial';x.textAlign='left';x.fillText((e.me?'⭐ ':e.friend?'🌐 ':'')+e.name+' · '+CARS[e.build.car].name,xx,tagY+H*.03);
    if(stage>=1){const shown=Math.min(5,Math.floor((k-2)*1.4));x.font='700 '+(H*.026|0)+'px Arial';for(let j=0;j<Math.max(0,shown);j++){x.fillStyle='#ffd02b';x.fillText(JUDGES[j].e+e.judges[j],xx+j*w*.2,tagY+H*.062);}}
    if(stage>=3){const r=ranked.indexOf(e);if(r<3){x.font='900 '+(H*.07|0)+'px Arial';x.textAlign='right';x.fillText(['🥇','🥈','🥉'][r],xx+w,tagY+H*.07);x.textAlign='left';}}
   });
@@ -9302,18 +9311,21 @@ function finishShow(show,entries,ranked,place,sig,panel){
  const best=k=>entries.slice().sort((a,b)=>b.s.sec[k]-a.s.sec[k])[0];const AW=[['🎨 Best Paint','ext'],['🔧 Best Engine','eng'],['📏 Best Wheels','whl']];
  const awards=AW.filter(([n,k])=>best(k)===me).map(a=>a[0]);if(entries.slice().sort((a,b)=>b.crowd-a.crowd)[0]===me)awards.push('📣 People\'s Choice');
  const awCash=awards.length*Math.round(prize[2]*.8);cash+=awCash;rep+=awards.length*25;
+ const NETS=show._net,fr=NETS&&entries.find(e=>e.friend),beat=fr&&me.score>fr.score;
+ if(NETS){cash=beat?NET_WIN:NET_LOSS;rep=beat?60:20;}
+ if(S.creative){cash=0;rep=0;}
  S.shows.played++;S.shows.lastSig=sig;if(place===0){S.shows.won++;trophy('show1');}if(S.shows.played>=5)trophy('show5');if(awards.length>=2)trophy('awards2');if(me.sheet>=85)trophy('sheet85');
  earn(cash,place<3?['1st','2nd','3rd'][place]+' place at '+show.name:'thanks for showing up');addRep(rep);
  const car=cur();car.dirt=Math.min(1,(car.dirt||0)+.05);car.shine=false;save();top();
  if(place<3){cha();burst('crowd',1.4);}
  const weak=JUDGES.map((j,i)=>[j,me.judges[i]]).sort((a,b)=>a[1]-b[1])[0];
  const advice={ext:'Better paint finish, a wrap, an aero kit, or a full detail.',whl:'Bigger or flashier wheels, big brakes, and lower it (or lift it for trucks).',eng:'More engine parts, a blower or scoop, and keep it clean.',int:'Subwoofers, underglow, halo lights and tint.',imp:'Build for the show theme and keep changing your build.'};
- panel.innerHTML='<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start"><div><div style="font-size:30px;font-weight:900;color:'+(place<3?'#22c55e':'#ff8a2b')+'">'+(place<3?['🥇 1ST PLACE!','🥈 2ND PLACE!','🥉 3RD PLACE!'][place]:'#'+(place+1)+' of 6')+'</div><div style="font-size:20px;font-weight:900;color:#7dff9b;margin-top:6px">+'+money(cash)+' · +'+rep+' rep</div>'+(awards.length?'<div style="margin-top:6px;font-weight:800;color:#ffd02b">'+awards.join(' · ')+' (+'+money(awCash)+')</div>':'')+'</div>'
+ panel.innerHTML=(NETS?'<div style="font-size:26px;font-weight:900;margin-bottom:8px;color:'+(beat?'#22c55e':'#ff8a2b')+'">'+(beat?'🏆 YOU BEAT '+escH(fr.name).toUpperCase()+'!':'😤 '+escH(fr.name).toUpperCase()+' WINS THIS ONE')+'</div><div style="color:#cbd5df;margin-bottom:8px">You: '+me.sheet+'/100 + '+me.crowd+' crowd votes · '+escH(fr.name)+': '+fr.sheet+'/100 + '+fr.crowd+' crowd votes</div>':'')+'<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start"><div><div style="font-size:30px;font-weight:900;color:'+(place<3?'#22c55e':'#ff8a2b')+'">'+(place<3?['🥇 1ST PLACE!','🥈 2ND PLACE!','🥉 3RD PLACE!'][place]:'#'+(place+1)+' of 6')+'</div><div style="font-size:20px;font-weight:900;color:#7dff9b;margin-top:6px">'+(S.creative?'🎨 Creative mode: no prizes':'+'+money(cash)+' · +'+rep+' rep')+'</div>'+(awards.length?'<div style="margin-top:6px;font-weight:800;color:#ffd02b">'+awards.join(' · ')+' (+'+money(awCash)+')</div>':'')+'</div>'
  +'<div style="background:#fbfaf3;color:#111;font-family:Consolas,monospace;padding:10px 14px;border-radius:4px;min-width:280px;transform:rotate(.6deg)"><b>OFFICIAL SCORE SHEET · '+escH(show.name.toUpperCase())+'</b><table style="width:100%;font-size:13px;margin-top:4px">'
  +JUDGES.map((j,i)=>'<tr><td>'+j.e+' '+j.lbl+'</td><td style="text-align:right;font-weight:800">'+me.judges[i]+' / 20</td></tr>').join('')
  +'<tr style="border-top:1px dashed #888"><td><b>TOTAL</b></td><td style="text-align:right;font-weight:900">'+me.sheet+' / 100</td></tr><tr><td>📣 Crowd votes</td><td style="text-align:right">'+me.crowd+'</td></tr><tr><td>🧽 Cleanliness</td><td style="text-align:right">'+Math.round(me.s.clean*100)+'%</td></tr></table></div>'
  +'<div style="flex:1;min-width:200px;font-size:14px;line-height:1.6">Lowest score: <b>'+weak[0].e+' '+weak[0].lbl+'</b><br>💡 '+advice[weak[0].k]+'</div></div>'
- +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="st-btn go" data-nav="show">ANOTHER SHOW</button><button class="st-btn alt" data-nav="garage">GARAGE</button><button class="st-btn alt" data-nav="hub">HUB</button></div>';
+ +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'+(NETS?'<button class="st-btn go" data-act="netinv" data-m="show">REMATCH</button><button class="st-btn" data-nav="online">ONLINE ROOM</button>':'<button class="st-btn go" data-nav="show">ANOTHER SHOW</button>')+'<button class="st-btn alt" data-nav="garage">GARAGE</button><button class="st-btn alt" data-nav="hub">HUB</button></div>';
 }
 /* ===== Street Tuner · hooks into WrenchWorks ===== */
 AUD.on=S.sound!==false;
@@ -9426,7 +9438,7 @@ const GUIDE=[
 ];
 function guideState(){if(!S.guide){S.guide={done:{},hide:false};if(S.active)for(const s of GUIDE){try{if(s.check())S.guide.done[s.id]=1;}catch(e){}}}return S.guide;}
 function guideNext(){const g=guideState();return GUIDE.find(s=>!g.done[s.id]);}
-function guideTick(){const g=guideState();let changed=false;
+function guideTick(){if(S.creative||(S.guide&&S.guide.skip)){renderGuide();return;}const g=guideState();let changed=false;
  for(const s of GUIDE){if(!g.done[s.id]&&s.check()){g.done[s.id]=1;changed=true;
   if(s.id!=='car'){if(s.cash){S.cash+=s.cash;}sfx('click');cha&&cha();const n=GUIDE.filter(x=>g.done[x.id]).length;
    toastST('✅ Guide step '+n+' done: '+s.title+(s.cash?' · +'+money(s.cash):''));}}}
@@ -9435,23 +9447,25 @@ function guideTick(){const g=guideState();let changed=false;
  renderGuide();}
 function renderGuide(){if(!root)return;let el=root.querySelector('#stGuide');const g=guideState();const s=guideNext();setTimeout(()=>root.classList.toggle('st-has-guide',!!root.querySelector('#stGuide')),0);
  const pickNow=!S.active&&screen==='pick';
- const hideNow=!s||g.hide||screen==='racing'||(!S.active&&!pickNow)||!!root.querySelector('#stRace');
- if(hideNow){if(el)el.remove();if(!s||!S.active&&!pickNow)return;if(g.hide&&!root.querySelector('#stRace'))guideTab();else{const t=root.querySelector('#stGuideTab');if(t)t.remove();}return;}
+ const hideNow=S.creative||g.skip||!s||g.hide||screen==='racing'||(!S.active&&!pickNow)||!!root.querySelector('#stRace');
+ if(hideNow){if(el)el.remove();if(S.creative||g.skip){const t=root.querySelector('#stGuideTab');if(t)t.remove();root.querySelectorAll('[data-nav].st-glow,[data-act=pick].st-glow').forEach(b=>b.classList.remove('st-glow'));return;}if(!s||!S.active&&!pickNow)return;if(g.hide&&!root.querySelector('#stRace'))guideTab();else{const t=root.querySelector('#stGuideTab');if(t)t.remove();}return;}
  const t=root.querySelector('#stGuideTab');if(t)t.remove();
  root.querySelectorAll('[data-nav].st-glow').forEach(b=>b.classList.remove('st-glow'));if(s.nav){const nb=root.querySelector('[data-nav='+s.nav+']');if(nb)nb.classList.add('st-glow');}
  if(pickNow)body.querySelectorAll('[data-act=pick]').forEach(b=>b.classList.add('st-glow'));
  const n=GUIDE.indexOf(s)+1;
  if(!el){el=document.createElement('div');el.id='stGuide';el.className='st-guide';root.appendChild(el);}
- const html='<div class="gtop"><b>📋 Step '+n+' of '+GUIDE.length+'</b><span><button data-act="guidelist" title="All steps">☰</button><button data-act="guidehide" title="Hide the guide">✕</button></span></div><div class="gt">'+escH(s.title)+'</div><div class="gh">'+escH(s.how)+'</div>'+(s.go?'<button class="st-btn go gs" data-act="guidego">👉 SHOW ME</button>':'')+(s.cash?'<span class="gr">Reward: '+money(s.cash)+'</span>':'');
+ const html='<div class="gtop"><b>📋 Step '+n+' of '+GUIDE.length+'</b><span><button data-act="guideskip" title="Skip the guide">SKIP</button><button data-act="guidelist" title="All steps">☰</button><button data-act="guidehide" title="Hide the guide">✕</button></span></div><div class="gt">'+escH(s.title)+'</div><div class="gh">'+escH(s.how)+'</div>'+(s.go?'<button class="st-btn go gs" data-act="guidego">👉 SHOW ME</button>':'')+(s.cash?'<span class="gr">Reward: '+money(s.cash)+'</span>':'');
  if(el.dataset.k!==s.id+screen){el.innerHTML=html;el.dataset.k=s.id+screen;}}
 function guideTab(){if(root.querySelector('#stGuideTab'))return;const b=document.createElement('button');b.id='stGuideTab';b.className='st-guide-tab';b.dataset.act='guideshow';b.textContent='📋 Guide';root.appendChild(b);}
+handlers.guideskip=()=>{guideState().skip=true;save();document.querySelectorAll('.st-modal').forEach(m=>{if(/Step-by-step guide/.test(m.textContent))m.remove();});renderGuide();toastST('Guide skipped. Turn it back on any time in ⚙ Settings.');if(screen==='settings')go('settings');};
+handlers.guideon=()=>{guideState().skip=false;save();renderGuide();toastST('📋 Starter guide is back on.');if(screen==='settings')go('settings');};
 handlers.guidehide=()=>{guideState().hide=true;save();renderGuide();toastST('Guide hidden. Tap 📋 Guide in the corner to bring it back.');};
 handlers.guideshow=()=>{guideState().hide=false;save();renderGuide();};
 handlers.guidego=()=>{const s=guideNext();if(!s)return;if(s.cat)gCat=s.cat;go(s.go);setTimeout(()=>{const t=s.hl&&body.querySelector(s.hl);if(t){t.scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('st-glow');setTimeout(()=>t.classList.remove('st-glow'),6000);}},120);};
 handlers.guidelist=()=>{const g=guideState();const m=document.createElement('div');m.className='st-modal';m.style.zIndex=9200;
  m.innerHTML='<div class="st-card" style="max-width:560px;width:94vw;max-height:88vh;overflow:auto"><h2 style="margin:0 0 4px">📋 Step-by-step guide</h2><div style="color:#aab6c3;margin-bottom:10px">Do these in order to go from $0 to your first real build. Steps tick off by themselves.</div>'
  +GUIDE.map((s,i)=>{const d=!!g.done[s.id],nx=!d&&s===guideNext();return '<div style="display:flex;gap:10px;padding:8px;border-radius:10px;margin:4px 0;background:'+(nx?'#2a2314':'#151c25')+';border:1px solid '+(d?'#22c55e':nx?'#ffd02b':'#243040')+'"><b style="font-size:20px;width:28px;text-align:center">'+(d?'✅':nx?'👉':(i+1))+'</b><div><b>'+escH(s.title)+'</b>'+(s.cash?' <span class="st-pill">+'+money(s.cash)+'</span>':'')+'<div style="color:#aab6c3;font-size:13px">'+escH(s.how)+'</div></div></div>';}).join('')
- +'<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="st-btn alt" data-act="guidereset">START GUIDE OVER</button><button class="st-btn" data-close>CLOSE</button></div></div>';
+ +'<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="st-btn alt" data-act="guideskip">SKIP GUIDE</button><button class="st-btn alt" data-act="guidereset">START GUIDE OVER</button><button class="st-btn" data-close>CLOSE</button></div></div>';
  m.addEventListener('click',e=>{if(e.target===m||e.target.closest('[data-close]'))m.remove();if(e.target.closest('[data-act=guidereset]')){S.guide={done:{},hide:false};save();m.remove();guideTick();}});root.appendChild(m);};
 const GUIDE_CSS=`.st-guide{position:absolute;left:12px;bottom:12px;z-index:9050;width:min(340px,calc(100vw - 24px));background:#111821ee;border:2px solid #ffd02b;border-radius:14px;padding:10px 12px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.5);font-size:13px}
 .st-guide .gtop{display:flex;justify-content:space-between;align-items:center;color:#ffd02b;font-size:12px;letter-spacing:.5px}.st-guide .gtop button{background:#1f2832;border:1px solid #33404d;color:#fff;border-radius:7px;padding:2px 8px;margin-left:4px}
@@ -9463,9 +9477,239 @@ const GUIDE_CSS=`.st-guide{position:absolute;left:12px;bottom:12px;z-index:9050;
 (()=>{const st=document.createElement('style');st.textContent=GUIDE_CSS;document.head.appendChild(st);})();
 {const _go=go;go=function(s,a){if(s==='race'&&S.active){S.seen=S.seen||{};S.seen.raceScreen=1;}_go(s,a);try{guideTick();}catch(e){}};}
 setInterval(()=>{try{if(root&&root.style.display!=='none')guideTick();}catch(e){}},1200);
+/* ===== Street Tuner · online multiplayer (V40) =====
+   Room codes connect two players. Live drag races and car show battles.
+   WWNet (shared with the 3D garage co-op) uses PeerJS for the real internet,
+   or a BroadcastChannel between tabs when localStorage.wwNetLocal is '1' (used by tests). */
+const NET_V=1;
+window.WWNet=window.WWNet||(()=>{
+ const ABC='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+ const N={state:'off',isHost:false,code:'',peer:null,conn:null,bc:null,ls:{},last:0,id:Math.random().toString(36).slice(2),why:''};
+ const emit=(t,m)=>{(N.ls[t]||[]).slice().forEach(f=>{try{f(m);}catch(e){console.error('[WWNet]',e);}});};
+ N.on=(t,f)=>{(N.ls[t]=N.ls[t]||[]).push(f);return ()=>{N.ls[t]=(N.ls[t]||[]).filter(x=>x!==f);};};
+ const set=s=>{N.state=s;emit('state',s);};
+ const local=()=>{try{return localStorage.getItem('wwNetLocal')==='1';}catch(e){return false;}};
+ const newCode=()=>{let s='';for(let i=0;i<4;i++)s+=ABC[Math.floor(Math.random()*ABC.length)];return s;};
+ N.clean=c=>String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,'').replace(/^WW(?=[A-Z0-9]{4}$)/,'').slice(0,4);
+ function loadPeer(){return new Promise((res,rej)=>{if(window.Peer)return res();const urls=['https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'];let i=0;
+  const nx=()=>{if(i>=urls.length)return rej(new Error('load'));const s=document.createElement('script');s.src=urls[i++];s.onload=()=>window.Peer?res():nx();s.onerror=nx;document.head.appendChild(s);};nx();});}
+ function got(m){N.last=Date.now();if(!m||!m.t)return;if(m.t==='_ping')return;if(m.t==='_bye'){N.leave('left',true);return;}emit(m.t,m);}
+ N.send=(t,o)=>{if(N.state!=='on'&&t!=='_hello'&&t!=='_welcome')return false;const m=Object.assign({},o||{},{t});try{if(N.bc)N.bc.postMessage({from:N.id,code:N.code,m});else if(N.conn&&N.conn.open)N.conn.send(m);else return false;}catch(e){return false;}return true;};
+ function opened(){clearTimeout(N.to);clearInterval(N.hello);set('on');N.last=Date.now();clearInterval(N.hb);N.hb=setInterval(()=>{N.send('_ping');if(Date.now()-N.last>12000)N.leave('lost');},2000);emit('open');}
+ function fail(why){N.leave(why,true);emit('fail',why);}
+ function bcOpen(){N.bc=new BroadcastChannel('wwnet-'+N.code);N.bc.onmessage=e=>{const d=e.data;if(!d||d.from===N.id||d.code!==N.code)return;
+  if(d.m.t==='_hello'){if(N.isHost&&N.state==='wait'){N.peerId=d.from;N.send('_welcome');opened();}return;}
+  if(d.m.t==='_welcome'){if(!N.isHost&&N.state==='joining'){N.peerId=d.from;opened();}return;}
+  if(N.peerId&&d.from!==N.peerId)return;got(d.m);};}
+ N.hostRoom=async()=>{N.leave('',true);N.isHost=true;N.code=newCode();set('loading');
+  if(local()){bcOpen();set('wait');return;}
+  try{await loadPeer();}catch(e){return fail('load');}
+  const start=tries=>{const p=N.peer=new window.Peer('wwgarage-'+N.code,{debug:0});
+   p.on('open',()=>set('wait'));
+   p.on('error',e=>{if(e&&e.type==='unavailable-id'&&tries<4){try{p.destroy();}catch(x){}N.code=newCode();start(tries+1);}else if(N.state!=='on')fail(e&&e.type==='network'||e&&e.type==='server-error'||e&&e.type==='socket-error'?'server':'server');});
+   p.on('connection',c=>{if(N.conn&&N.conn.open){try{c.close();}catch(x){}return;}N.conn=c;c.on('open',opened);c.on('data',got);c.on('close',()=>{if(N.state==='on')N.leave('lost',true);});});};
+  start(0);};
+ N.joinRoom=async code=>{N.leave('',true);N.isHost=false;N.code=N.clean(code);if(N.code.length!==4){emit('fail','badcode');return;}set('joining');
+  N.to=setTimeout(()=>{if(N.state==='joining')fail('noroom');},local()?4000:16000);
+  if(local()){bcOpen();N.send('_hello');N.hello=setInterval(()=>N.send('_hello'),400);return;}
+  try{await loadPeer();}catch(e){return fail('load');}
+  const p=N.peer=new window.Peer({debug:0});
+  p.on('open',()=>{const c=N.conn=p.connect('wwgarage-'+N.code,{reliable:true});c.on('open',opened);c.on('data',got);c.on('close',()=>{if(N.state==='on')N.leave('lost',true);});});
+  p.on('error',e=>{if(N.state==='on')return;fail(e&&e.type==='peer-unavailable'?'noroom':'server');});};
+ N.leave=(why,quiet)=>{const was=N.state;if(!quiet&&was==='on')N.send('_bye');clearInterval(N.hb);clearInterval(N.hello);clearTimeout(N.to);
+  try{N.conn&&N.conn.close();}catch(e){}try{N.peer&&N.peer.destroy();}catch(e){}try{N.bc&&N.bc.close();}catch(e){}N.conn=N.peer=N.bc=null;N.peerId=null;
+  if(was!=='off'){N.why=why||'';set('off');if(was==='on')emit('close',why||'left-me');}};
+ window.addEventListener('beforeunload',()=>{if(N.state==='on')N.send('_bye');});
+ return N;
+})();
+const NET=window.WWNet;
+const ON={peer:null,inv:null,sent:null};
+function netName(){if(!S.netName)S.netName='Racer '+(100+Math.floor(Math.random()*900));return S.netName;}
+function netMe(){const b=JSON.parse(JSON.stringify(cur()));const s=perfSummary(b);return {v:NET_V,name:netName(),build:b,lvl:level(),hp:s.hp,et:s.et,pi:s.pi,cr:!!S.creative};}
+function netHello(force){const p=netMe();const sig=JSON.stringify(p);if(!force&&sig===ON.lastSig)return;ON.lastSig=sig;NET.send('hello',{where:'st',p});}
+function netPeerTake(p){if(!p)return;if(p.v!==NET_V){toastST('⚠ Your friend has a different version. Both of you should reload the game.');}ON.peer=p;}
+const NET_WIN=300,NET_LOSS=120;
+function netPay(base){return base;}
+function netPaid(){}
+const netCrOk=()=>!ON.peer||!!ON.peer.cr===!!S.creative;
+const netCrMsg=()=>'Creative mode does not match. You have it '+(S.creative?'ON':'OFF')+' and '+(ON.peer?ON.peer.name:'your friend')+' has it '+(ON.peer&&ON.peer.cr?'ON':'OFF')+'. Both players need the same setting in ⚙ Settings to race or show together.';
+const NETFAIL={load:'Could not reach the online service. This network may block it (school Wi-Fi often does). Try home Wi-Fi or phone data.',server:'The online service is not answering right now. Try again in a minute.',noroom:'No room with that code. Check the code, and make sure your friend is still on the waiting screen.',badcode:'Room codes have 4 letters or numbers.',lost:'Connection lost.'};
+NET.on('open',()=>{netHello(true);toastST('🌐 Connected! You are in a room together.');if(root&&screen==='online')go('online');});
+NET.on('hello',m=>{netPeerTake(m.p);if(root&&screen==='online')go('online');});
+NET.on('state',()=>{if(root&&root.style.display!=='none'&&screen==='online')go('online');});
+NET.on('fail',why=>{toastST('🌐 '+(NETFAIL[why]||'Could not connect.'));if(root&&screen==='online')go('online');});
+NET.on('close',why=>{const had=ON.peer;ON.peer=null;ON.inv=ON.sent=null;const m=document.getElementById('stNetInv');if(m)m.remove();
+ if(RACE&&RACE.online&&!RACE.res)netOppGone(RACE,'Your friend left the room.');
+ if(had&&why!=='left-me')toastST('🌐 '+(why==='left'?had.name+' left the room.':'Connection lost.'));if(root&&screen==='online')go('online');});
+NET.on('inv',m=>{netPeerTake(m.p);if(!netCrOk()){NET.send('no',{cr:1});toastST('🌐 '+netCrMsg());if(screen==='online')go('online');return;}ON.inv={m:m.m,d:m.d};if(!root||root.style.display==='none')return;if(screen==='online')go('online');else if(!(RACE&&!RACE.res))netInvModal();else toastST('🌐 '+ON.peer.name+' wants a rematch.');});
+NET.on('acc',m=>{netPeerTake(m.p);ON.sent=null;if(NET.isHost)netStart(m.m,m.d);});
+NET.on('no',m=>{ON.sent=null;toastST('🌐 '+(m&&m.cr?netCrMsg():(ON.peer?ON.peer.name:'Your friend')+' said not now.'));if(screen==='online')go('online');});
+NET.on('start',m=>{netPeerTake(m.p);netRun(m);});
+NET.on('rs',m=>{if(RACE&&RACE.online){RACE.rem=m;RACE.rem.at=performance.now();}});
+NET.on('tree',m=>{if(RACE&&RACE.online&&!RACE.online.host&&!RACE.armAt)RACE.armAt=RACE.t+Math.max(.1,m.d);});
+NET.on('fin',m=>{if(RACE&&RACE.online)netOppFin(RACE,m.rec,m.red);});
+NET.on('rq',()=>{if(RACE&&RACE.online&&!RACE.res)netOppGone(RACE,(ON.peer?ON.peer.name:'Your friend')+' quit the race.');});
+const MODE_NAME=(m,d)=>m==='show'?'a car show battle':'a '+(DISTS[d]?DISTS[d].name:'¼ mile')+' drag race';
+function netInvModal(){const old=document.getElementById('stNetInv');if(old)old.remove();if(!ON.inv||!ON.peer)return;const m=document.createElement('div');m.className='st-modal';m.id='stNetInv';m.style.zIndex=9300;
+ m.innerHTML='<div class="st-card" style="max-width:440px;text-align:center"><div style="font-size:46px">🌐</div><h2 style="margin:4px 0">'+escH(ON.peer.name)+' wants '+MODE_NAME(ON.inv.m,ON.inv.d)+'!</h2><p style="color:#cbd5df">They are bringing their '+escH(CARS[ON.peer.build.car]?CARS[ON.peer.build.car].name:'car')+' ('+ON.peer.hp+' hp).</p><button class="st-btn go" data-act="netacc">ACCEPT</button> <button class="st-btn alt" data-act="netno">NOT NOW</button></div>';root.appendChild(m);}
+handlers.netacc=()=>{const m=document.getElementById('stNetInv');if(m)m.remove();if(!ON.inv)return;if(!netCrOk()){ON.inv=null;NET.send('no',{cr:1});toastST('🌐 '+netCrMsg());return go('online');}const i=ON.inv;ON.inv=null;NET.send('acc',{m:i.m,d:i.d,p:netMe()});if(NET.isHost)netStart(i.m,i.d);else{toastST('Starting…');if(screen==='online')go('online');}};
+handlers.netno=()=>{const m=document.getElementById('stNetInv');if(m)m.remove();ON.inv=null;NET.send('no');if(screen==='online')go('online');};
+handlers.netinv=d=>{if(NET.state!=='on'||!ON.peer){toastST('Join a room with a friend first.');return go('online');}if(!netCrOk()){toastST('🌐 '+netCrMsg());return go('online');}ON.sent={m:d.m,d:d.d||'quarter'};NET.send('inv',{m:ON.sent.m,d:ON.sent.d,p:netMe()});toastST('🌐 Invite sent. Waiting for '+ON.peer.name+'…');if(screen==='online')go('online');else go('online');};
+handlers.nethost=()=>{netSaveName();NET.hostRoom();};
+handlers.netjoin=()=>{netSaveName();const c=body.querySelector('#netCode');NET.joinRoom(c?c.value:'');};
+handlers.netleave=()=>{NET.leave('left-me');ON.peer=null;go('online');};
+function netSaveName(){const n=body.querySelector('#netName');if(n){const v=n.value.replace(/[<>]/g,'').trim().slice(0,16);if(v)S.netName=v;}netName();save();}
+/* host decides everything that must match on both screens, then both run it */
+function netStart(m,d){if(!ON.peer)return;let p;
+ if(m==='show'){const pool=SHOWS.filter(s=>!s.rookie);const show=pool[Math.floor(Math.random()*pool.length)];const seed=Math.floor(Math.random()*1e6);const pw=Math.min(10,Math.max(1,Math.round((level()+(ON.peer.lvl||1))/2)));
+  const ai=[];for(let i=0;i<4;i++)ai.push({name:['Marco','Jess','DJ Turbo','Grandpa Gus','Kayla','Rico','Lena','Bo','Tasha','Wes'][(seed+i*3)%10],build:randomBuild(seed+i*17,show.theme,null,pw)});
+  p={m:'show',show:show.id,seed,ai,players:[netMe(),ON.peer]};}
+ else{const tr=TRACKS[Math.floor(Math.random()*TRACKS.length)];p={m:'race',dist:d||'quarter',tree:Math.random()<.5?'sport':'pro',track:tr.id,amb:Math.round(tr.temp[0]+Math.random()*(tr.temp[1]-tr.temp[0])),hostP:netMe()};}
+ NET.send('start',Object.assign({},p,{p:netMe()}));netRun(p);}
+function netRun(p){const m=document.getElementById('stNetInv');if(m)m.remove();ON.inv=ON.sent=null;if(!ON.peer)return;
+ if(p.m==='race'){const opp={name:ON.peer.name,build:ON.peer.build,cash:NET_WIN,rep:40,online:true,skill:1,rtMean:.1,redP:0};
+  go('racego',{opp,online:{host:NET.isHost},dist:p.dist,tree:p.tree,track:TRACKS.find(t=>t.id===p.track)||TRACKS[0],amb:p.amb});return;}
+ if(p.m==='show'){const base=SHOWS.find(s=>s.id===p.show)||SHOWS[0];go('showgo',Object.assign({},base,{_net:{seed:p.seed,ai:p.ai,players:p.players,meIdx:NET.isHost?0:1}}));}}
+/* ---- live race sync ---- */
+function netRaceSend(R){const now=performance.now();if(R._ns&&now-R._ns<50)return;R._ns=now;const c=R.me,r=c.rec;
+ NET.send('rs',{x:+c.x.toFixed(3),v:+(c.v||0).toFixed(2),rpm:Math.round(c.rpm),stg:c.stg,l:c.launched?1:0,g:c.gear||0,tt:Math.round(c.tt),b:R.burnHeld?1:0,n:c.nosOn?1:0,nl:c.nosLeft||0,sl:+(c.slip||0).toFixed(2),w:+(c.wheelie||0).toFixed(2),ch:c.chute,red:c.red?1:0,
+  rec:{rt:r.rt,sp:r.sp,mph:r.mph,et:r.et,trap:r.trap}});}
+function netRaceApply(R,dt){const s=R.rem,o=R.op;if(!s||!o)return;const age=Math.min(.25,(performance.now()-s.at)/1000);
+ const tx=s.x+(s.l?s.v*age:0);o.x+= (tx-o.x)*Math.min(1,dt*14);if(Math.abs(tx-o.x)>6)o.x=tx;o.target=o.x;o.v=s.v;o.rpm=s.rpm;o.stg=s.stg;o.tt=s.tt;o.gear=s.g;o.nosOn=!!s.n;o.nosLeft=s.nl;o.slip=s.sl;o.wheelie=s.w;o.chute=s.ch;o.t=s.l?(o.t||0)+dt:0;o.shiftT=0;
+ if(s.l&&!o.launched){o.launched=true;o.launchAt=R.t;}
+ if(s.b&&o.stg===0)for(let i=0;i<3;i++)R.parts.push(smoke(o.x-3.6,.5,true,true));
+ if(s.red)R.opRed=true;
+ if(s.rec&&!o.rec.fin){o.rec.rt=s.rec.rt;o.rec.sp=s.rec.sp||{};o.rec.mph=s.rec.mph||{};if(s.rec.rt!=null&&o.rec.left==null&&R.meGreen)o.rec.left=R.meGreen+s.rec.rt;if(s.rec.et!=null)netOppFin(R,s.rec,s.red);}
+ R.oeng&&R.oeng.set(o.rpm,s.l?1:.5,.3);}
+function netOppFin(R,rec,red){const o=R.op;if(!o||o.rec.fin||!rec||rec.et==null)return;const g=R.meGreen||R.t;o.rec={left:g+rec.rt,rt:rec.rt,sp:rec.sp||{},mph:rec.mph||{},et:rec.et,trap:rec.trap,fin:g+rec.rt+rec.et};if(red||rec.rt<0)R.opRed=true;}
+function netOppGone(R,msg){R.say(msg,'#ffd02b');toastST('🌐 '+msg);const o=R.op;if(!o||o.rec.fin)return;
+ if(!R.me.launched){setTimeout(()=>{if(RACE===R&&!R.res)go('online');},1800);return;}
+ o.rec=Object.assign({},o.rec,{rt:o.rec.rt!=null?o.rec.rt:9.999,et:99,trap:0,fin:1e9,dnf:true});R.netGone=true;}
+SCREENS.online=()=>{const st=NET.state,P=ON.peer;const me=netMe();
+ const carLine=(p,lbl)=>'<div class="st-card" style="flex:1;min-width:220px"><div style="color:#aab6c3;font-size:12px">'+lbl+'</div><b style="font-size:19px">'+escH(p.name)+'</b><div style="margin-top:4px">'+escH(CARS[p.build.car]?CARS[p.build.car].name:'?')+' '+clsBadge(p.pi||0)+'</div><div style="color:#cbd5df;font-size:13px">'+p.hp+' hp · ¼ mile '+(+p.et).toFixed(2)+'s · Rep level '+(p.lvl||1)+'</div></div>';
+ let h='<div class="st-h">Play online 🌐</div><div class="st-sub">Race or show against a real friend on another phone or computer. One of you hosts a room, the other joins with the room code.</div>';
+ if(st==='off'){h+='<div class="st-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))"><div class="st-card"><b style="font-size:18px">Your name</b><div style="margin:8px 0"><input id="netName" maxlength="16" value="'+escH(netName())+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #33404d;background:#0b0f14;color:#fff;font-size:17px"></div><div style="color:#aab6c3;font-size:13px">Your friend sees this name and your current car.</div></div>'
+  +'<div class="st-card"><b style="font-size:18px">🏠 Host a room</b><p style="color:#cbd5df;font-size:14px">You get a 4-letter room code to give your friend.</p><button class="st-btn go" data-act="nethost">HOST A ROOM</button></div>'
+  +'<div class="st-card"><b style="font-size:18px">🔑 Join a room</b><p style="color:#cbd5df;font-size:14px">Type the code your friend got.</p><div style="display:flex;gap:8px"><input id="netCode" maxlength="7" placeholder="CODE" autocapitalize="characters" autocomplete="off" style="flex:1;min-width:0;padding:10px;border-radius:10px;border:1px solid #33404d;background:#0b0f14;color:#fff;font-size:22px;letter-spacing:4px;text-transform:uppercase;text-align:center"><button class="st-btn" data-act="netjoin">JOIN</button></div></div></div>'
+  +'<div class="st-sub" style="font-size:13px">ℹ Both players need the newest version of the game. Some school Wi-Fi blocks online play; home Wi-Fi or phone data works best. Creative mode has to match: both ON or both OFF.</div>';}
+ else if(st==='loading'||st==='wait'){h+='<div class="st-card" style="margin:10px 16px;text-align:center"><div style="color:#aab6c3">'+(st==='loading'?'Opening a room…':'Your room code')+'</div><div id="netShowCode" style="font-size:64px;font-weight:900;letter-spacing:10px;color:#ffd02b;margin:6px 0">'+(st==='wait'?escH(NET.code):'····')+'</div><div style="color:#cbd5df">Tell your friend: open Street Tuner → <b>🌐 Online</b> → type this code → <b>JOIN</b>.</div><div style="margin-top:10px;color:#aab6c3">⏳ Waiting for your friend to join…</div><button class="st-btn alt" style="margin-top:12px" data-act="netleave">CANCEL</button></div>';}
+ else if(st==='joining'){h+='<div class="st-card" style="margin:10px 16px;text-align:center"><div style="font-size:22px;font-weight:900">Connecting to room '+escH(NET.code)+'…</div><button class="st-btn alt" style="margin-top:12px" data-act="netleave">CANCEL</button></div>';}
+ else{h+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 16px">'+carLine(me,'YOU')+(P?carLine(P,'YOUR FRIEND'):'<div class="st-card" style="flex:1">Connected. Loading your friend\'s car…</div>')+'</div>';
+  if(P&&!netCrOk()){h+='<div class="st-card" style="margin:10px 16px;border:2px solid #ef4444"><b style="color:#ef4444">🎨 '+escH(netCrMsg())+'</b></div><div style="margin:6px 16px"><button class="st-btn alt" style="padding:6px 12px;font-size:13px" data-act="netleave">LEAVE ROOM</button></div>';body.innerHTML=h;return;}
+  if(ON.inv&&P)h+='<div class="st-card" style="margin:10px 16px;border:2px solid #ffd02b"><b style="font-size:18px">'+escH(P.name)+' wants '+MODE_NAME(ON.inv.m,ON.inv.d)+'!</b><div style="margin-top:8px"><button class="st-btn go" data-act="netacc">ACCEPT</button> <button class="st-btn alt" data-act="netno">NOT NOW</button></div></div>';
+  else if(ON.sent)h+='<div class="st-card" style="margin:10px 16px;text-align:center">⏳ Invite sent for '+MODE_NAME(ON.sent.m,ON.sent.d)+'. Waiting for '+escH(P?P.name:'your friend')+' to accept…</div>';
+  h+='<div class="st-grid"><div class="st-card"><b style="font-size:19px">🏁 Drag race</b><p style="color:#cbd5df;font-size:14px">Same tree, real opponent. You each do your own burnout, staging and launch. First to the stripe wins. '+(S.creative?'Creative mode: just for fun, no cash prizes.':'Win '+money(NET_WIN)+', lose and you still get '+money(NET_LOSS)+'. Race each other as many times as you like.')+'</p><button class="st-btn go" data-act="netinv" data-m="race" data-d="quarter">RACE ¼ MILE</button> <button class="st-btn" data-act="netinv" data-m="race" data-d="eighth">⅛ MILE</button></div>'
+  +'<div class="st-card"><b style="font-size:19px">🏆 Car show battle</b><p style="color:#cbd5df;font-size:14px">Both of your cars go in the same show. The judges and the crowd score you side by side. '+(S.creative?'Creative mode: just for fun, no cash prizes.':'Beat your friend for '+money(NET_WIN)+', or get '+money(NET_LOSS)+' if they win.')+'</p><button class="st-btn go" data-act="netinv" data-m="show">SHOW BATTLE</button></div></div>'
+  +'<div style="margin:6px 16px;color:#aab6c3;font-size:13px">Room '+escH(NET.code)+'. Switch cars in 🚗 Cars or upgrade in 🔧 Garage, and your friend sees the change. <button class="st-btn alt" style="padding:6px 12px;font-size:13px;margin-left:8px" data-act="netleave">LEAVE ROOM</button></div>';}
+ body.innerHTML=h;
+};
+{const _go=go;go=function(s,a){_go(s,a);try{if(NET.state==='on'&&(s==='online'||s==='hub'||s==='garage'||s==='dealer'||s==='settings'))netHello();}catch(e){}};}
 })();
 
 </script>
+<!-- WrenchWorks co-op --><script>
+/* WrenchWorks V40 — Garage co-op: two mechanics work on the same car.
+   The host owns the shop, the job and the car. The helper joins with a room code and sees the
+   host's car live. When the helper uses a tool, the move is sent to the host's game, which checks
+   it with the normal repair rules, so both players always see the same car and the same progress. */
+(function(){
+ if(!window.WWNet||typeof use!=='function'||typeof load!=='function')return;
+ const NET=window.WWNet,$id=id=>document.getElementById(id);
+ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const G={role:null,want:false,peer:'',last:'',nw:{},stash:null,psel:'',allowLoad:false};
+ window.wwCoop=G;
+ const myName=()=>{try{return localStorage.getItem('wwNetName')||'';}catch(e){return '';}};
+ const setName=n=>{try{localStorage.setItem('wwNetName',n);}catch(e){}};
+ const toolName=t=>(typeof TL!=='undefined'&&TL[t])?TL[t][1]:t;
+ const rawToast=(m,x)=>{try{toast(m,x);}catch(e){}};
+ /* ---------- host: one snapshot of everything both screens must agree on ---------- */
+ function snap(){const hid=[],nw=[];
+  for(const k in parts){const p=parts[k];if(!p)continue;if(!p.visible)hid.push(k);let m=null;p.traverse&&p.traverse(o=>{if(!m&&o.isMesh)m=o;});if(m&&m.userData&&m.userData.om&&m.material!==m.userData.om)nw.push(k);}
+  return {veh:window.wwV14?wwV14.current():null,J,I,ST,W,hood,up,st,lw,LW,lm:wwLiftMethod,hid,nw,PS,log:log.slice(-16),mist,paid,oil:!!oilP.visible,cool:!!coolP.visible,jt:J>=0&&JOBS[J]?JOBS[J].t:'',dg:window.wwV11&&J>=0?(wwV11.state.diag[J]||null):null,cash:Number.isFinite(cash)?cash:null};}
+ function push(force){if(G.role!=='host'||NET.state!=='on')return;let s;try{s=snap();}catch(e){return;}const j=JSON.stringify(s);if(!force&&j===G.last)return;G.last=j;NET.send('gsnap',{s});}
+ setInterval(()=>{push(false);if(G.role==='guest'){sendSel();if(window.wwV11&&J>=0){const d=JSON.stringify(wwV11.state.diag[J]||null);if(G.dgLast!==undefined&&d!==G.dgLast){G.dgLast=d;NET.send('gdiag',{J,d:wwV11.state.diag[J]||null});}}}},400);
+ /* ---------- helper: show the host's car exactly ---------- */
+ function apply(s){if(G.role!=='guest'||!s)return;G.applying=true;try{
+  if(window.wwV14&&s.veh&&wwV14.current()!==s.veh){try{wwV14.apply(s.veh);}catch(e){}G.nw={};}
+  J=s.J;I=s.I;ST=Array.isArray(s.ST)?s.ST:[];W=s.W;mist=s.mist;log=s.log||[];paid=!!s.paid;hood=!!s.hood;LW=s.LW;lw=s.lw;wwLiftMethod=s.lm||'jack';
+  const hid=new Set(s.hid||[]),nw=new Set(s.nw||[]);
+  for(const k in parts){const p=parts[k];if(!p)continue;p.visible=!hid.has(k);const isNew=nw.has(k);
+   if(isNew!==!!G.nw[k]){p.traverse(o=>{if(o.isMesh){if(isNew){o.material=o.material.clone();try{o.material.emissive=new THREE.Color(0x0a6a30);}catch(e){}}else if(o.userData&&o.userData.om)o.material=o.userData.om;}});G.nw[k]=isNew;}}
+  if(up!==!!s.up||st!==!!s.st||G.lastLw!==s.lw){up=!!s.up;st=!!s.st;G.lastLw=s.lw;try{showFloorJack(up&&s.lm!=='lift'?lw:null);showStands(st?lw:null);wwSetJackClear(!!st);}catch(e){}}
+  oilP.visible=!!s.oil;coolP.visible=!!s.cool;
+  for(const k in PS)delete PS[k];Object.assign(PS,s.PS||{});
+  if(window.wwV11&&s.J>=0){if(s.dg)wwV11.state.diag[s.J]=s.dg;else delete wwV11.state.diag[s.J];G.dgLast=JSON.stringify(s.dg||null);}
+  G.hostJob=s.jt;ui();badge();
+ }finally{G.applying=false;}}
+ function sendSel(){const k=(sel||'')+'|'+tool;if(k===G.psel)return;G.psel=k;NET.send('gsel',{sel:sel||'',tool});}
+ /* ---------- hooks ---------- */
+ const prevUse=use;
+ use=function(){
+  if(G.role==='guest'){if(!sel)return rawToast('Select a part first.');NET.send('guse',{sel,tool,sock,tq});return;}
+  const wasPaid=paid,c0=cash;const r=prevUse.apply(this,arguments);
+  if(G.role==='host'){if(!wasPaid&&paid&&J>=0)NET.send('gpaid',{pay:Number.isFinite(cash-c0)?Math.max(0,cash-c0):0,job:JOBS[J]?JOBS[J].t:''});push(true);}
+  return r;};
+ const prevLoad=load;
+ load=function(i){if(G.role==='guest'&&!G.allowLoad){rawToast('👥 In co-op the shop owner picks the job. You help on their car.');return;}const r=prevLoad.apply(this,arguments);if(G.role==='host')setTimeout(()=>push(true),50);return r;};
+ /* the helper's move, checked by the host's game with the real rules */
+ NET.on('guse',m=>{if(G.role!=='host')return;const keep={sel,tool,sock,tq},toasts=[],modals=[];
+  const pT=toast,pO=openOBDModal,pM=openMeterModal,pG=openGaugeModal;
+  toast=function(msg,x){toasts.push([String(msg),!!x]);return pT.call(this,'🧑‍🔧 '+G.peer+': '+msg,x);};
+  openOBDModal=function(){modals.push(['obd',[...arguments]]);};openMeterModal=function(){modals.push(['meter',[...arguments]]);};openGaugeModal=function(){modals.push(['gauge',[...arguments]]);};
+  try{sel=m.sel;tool=m.tool;if(m.sock!=null)sock=m.sock;if(m.tq!=null)tq=m.tq;use();}catch(e){console.warn('[co-op]',e);}
+  finally{toast=pT;openOBDModal=pO;openMeterModal=pM;openGaugeModal=pG;if(sel===m.sel)sel=keep.sel;tool=keep.tool;sock=keep.sock;tq=keep.tq;}
+  NET.send('gfb',{toasts,modals});try{buildTools();}catch(e){}ui();push(true);});
+ NET.on('gfb',m=>{if(G.role!=='guest')return;(m.toasts||[]).slice(-2).forEach(([t,x])=>rawToast(t,x));
+  (m.modals||[]).forEach(([k,a])=>{try{({obd:openOBDModal,meter:openMeterModal,gauge:openGaugeModal})[k].apply(null,a);}catch(e){}});});
+ NET.on('gsnap',m=>apply(m.s));
+ NET.on('gdiag',m=>{if(G.role!=='host'||!window.wwV11||m.J!==J)return;if(m.d)wwV11.state.diag[J]=m.d;ui();push(true);if(m.d&&m.d.ok)rawToast('🩺 '+G.peer+' made the diagnosis: '+(wwV11.DX&&wwV11.DX[J]?wwV11.DX[J].dx:'confirmed')+'.');});
+ NET.on('gsel',m=>{G.peerSel=m;badge();});
+ NET.on('gpaid',m=>{if(G.role!=='guest')return;const pay=Math.round((m.pay||0)*.5);if(Number.isFinite(cash))cash+=pay;xp+=15;try{wwSave();}catch(e){}ui();rawToast('👥 Job done with '+G.peer+'! You earned $'+pay+' helper pay and 15 XP.');});
+ NET.on('ghello',m=>{G.peer=m.name||'Friend';
+  if(!G.want){rawToast('👥 '+G.peer+' wants to work on a car with you. Open 👥 CO-OP in the garage to join in.');return;}
+  if(!G.role){NET.send('ghello',{name:myName()||'Mechanic',host:NET.isHost});begin();}else badge();panel();});
+ NET.on('open',()=>{if(G.want)NET.send('ghello',{name:myName()||'Mechanic',host:NET.isHost});panel();});
+ NET.on('state',()=>panel());
+ NET.on('fail',why=>{if(G.want){const M={load:'Could not reach the online service. This network may block it (school Wi-Fi often does).',server:'The online service is not answering. Try again in a minute.',noroom:'No room with that code. Check it and make sure your friend is waiting.',badcode:'Room codes have 4 letters or numbers.'};rawToast('👥 '+(M[why]||'Could not connect.'),1);}panel();});
+ NET.on('close',why=>{if(G.role)end(why==='left'?G.peer+' left the garage.':why==='left-me'?'You left co-op.':'Co-op connection lost.');panel();});
+ function begin(){G.role=NET.isHost?'host':'guest';G.open=false;
+  if(G.role==='guest'){G.stash={J,veh:window.wwV14?wwV14.current():null};sel=null;rawToast('👥 You joined '+G.peer+'\'s garage. Pick a part and a tool, then USE. Every move shows up on both screens.');}
+  else{rawToast('👥 '+G.peer+' joined your garage! They can work on this car with you.');push(true);}
+  badge();panel();}
+ function end(msg){const was=G.role;G.role=null;G.want=false;G.last='';G.peerSel=null;
+  if(was==='guest'){G.allowLoad=true;try{const s=G.stash||{J:-1};load(s.J>=0&&JOBS[s.J]?s.J:-1);}catch(e){}G.allowLoad=false;G.nw={};try{wwSave();}catch(e){}}
+  badge();rawToast('👥 '+msg);}
+ /* ---------- UI: a CO-OP button in the toolbar, a small panel, and a status badge ---------- */
+ const css=document.createElement('style');css.textContent=`#wwCoopPanel{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9500;background:#111821;border:2px solid #ffd02b;border-radius:16px;padding:18px 20px;color:#fff;width:min(460px,92vw);max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);font-family:inherit}
+#wwCoopPanel h2{margin:0 0 6px;font-size:22px}#wwCoopPanel p{color:#cbd5df;font-size:14px;margin:6px 0}#wwCoopPanel input{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #33404d;background:#0b0f14;color:#fff;font-size:17px;margin:4px 0}
+#wwCoopPanel button{padding:10px 14px;border-radius:10px;border:0;font-weight:800;cursor:pointer;margin:4px 4px 0 0;background:#ff8a2b;color:#111}#wwCoopPanel button.alt{background:#24303c;color:#fff}#wwCoopPanel .code{font-size:54px;font-weight:900;letter-spacing:10px;color:#ffd02b;text-align:center}
+#wwCoopBadge{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:60;background:#0b0f14e6;border:1.5px solid #5aa9ff;color:#fff;border-radius:999px;padding:5px 14px;font-size:13px;font-weight:700;pointer-events:none;max-width:92vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.ww-phone #wwCoopBadge{top:2px;font-size:11px;padding:3px 10px}`;document.head.appendChild(css);
+ function addBtn(){const bot=$id('bot');if(!bot||$id('wwCoopBtn'))return;const b=document.createElement('button');b.id='wwCoopBtn';b.textContent='👥 CO-OP';b.title='Work on the same car with a friend online';b.onclick=()=>{G.open=true;panel();};const ref=$id('rs');bot.insertBefore(b,ref||null);}
+ addBtn();setTimeout(addBtn,1500);
+ function badge(){let b=$id('wwCoopBadge');if(!G.role){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='wwCoopBadge';document.body.appendChild(b);}
+  const ps=G.peerSel;b.textContent=G.role==='host'?'👥 '+G.peer+' is helping'+(ps&&ps.sel?' · '+ps.sel+' · '+toolName(ps.tool):''):'👥 Helping in '+G.peer+'\'s garage'+(G.hostJob?' · '+G.hostJob:' · waiting for a job')+(ps&&ps.sel?' · '+G.peer+': '+ps.sel:'');}
+ function panel(){let el=$id('wwCoopPanel');if(!G.open){if(el)el.remove();return;}if(!el){el=document.createElement('div');el.id='wwCoopPanel';document.body.appendChild(el);el.addEventListener('click',onPanel);}
+  const s=NET.state;let h='<h2>👥 Garage co-op</h2>';
+  if(G.role){h+='<p>'+(G.role==='host'?'<b>'+esc(G.peer)+'</b> is in your garage. You pick the job from the JOB BOARD. You both work on this car, and every step shows up on both screens.':'You are helping in <b>'+esc(G.peer)+'</b>\'s garage. They pick the job. You pick a part and a tool and press USE, just like normal. When the job is done you get half the pay as helper pay.')+'</p><button class="alt" data-c="leave">LEAVE CO-OP</button> <button data-c="close">BACK TO WORK</button>';}
+  else if(s==='off'){h+='<p>Work on the same car with a friend on another computer or phone. One of you hosts (your shop, your job), the other joins as a helper.</p><label style="font-size:13px;color:#aab6c3">Your name</label><input id="wwCoopName" maxlength="16" value="'+esc(myName()||'Mechanic')+'">'
+   +'<button data-c="host">🏠 HOST MY GARAGE</button><div style="margin-top:12px;font-size:13px;color:#aab6c3">Or join a friend\'s garage:</div><input id="wwCoopCode" maxlength="7" placeholder="ROOM CODE" autocomplete="off" style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-size:22px"><button data-c="join">JOIN AS HELPER</button>'
+   +'<p style="font-size:12px;color:#8fa0b1">Both players need the newest version. Some school Wi-Fi blocks online play. If you are the helper, your current job restarts when you leave co-op.</p><button class="alt" data-c="close">CLOSE</button>';}
+  else if(s==='loading'||s==='wait'){h+='<p>'+(s==='wait'?'Your room code':'Opening a room…')+'</p><div class="code">'+(s==='wait'?esc(NET.code):'····')+'</div><p>Tell your friend: open the garage → <b>👥 CO-OP</b> → type this code → <b>JOIN AS HELPER</b>.</p><p>⏳ Waiting for your friend…</p><button class="alt" data-c="leave">CANCEL</button>';}
+  else if(s==='joining'){h+='<p>Connecting to room <b>'+esc(NET.code)+'</b>…</p><button class="alt" data-c="leave">CANCEL</button>';}
+  else{h+='<p>Connected. '+(G.want?'Getting the garage ready…':'You are connected in Street Tuner.')+'</p>'+(G.want?'':'<button data-c="coop">START GARAGE CO-OP</button>')+'<button class="alt" data-c="close">CLOSE</button>';}
+  el.innerHTML=h;}
+ function onPanel(e){const b=e.target.closest('[data-c]');if(!b)return;const c=b.dataset.c;const nm=$id('wwCoopName');if(nm&&nm.value.trim())setName(nm.value.replace(/[<>]/g,'').trim().slice(0,16));
+  if(c==='close'){G.open=false;panel();}
+  else if(c==='host'){G.want=true;NET.hostRoom();}
+  else if(c==='join'){G.want=true;const cd=$id('wwCoopCode');NET.joinRoom(cd?cd.value:'');}
+  else if(c==='coop'){G.want=true;NET.send('ghello',{name:myName()||'Mechanic',host:NET.isHost});panel();}
+  else if(c==='leave'){G.want=false;if(G.role)end('You left co-op.');NET.leave('left-me');G.open=false;panel();}}
+ window.addEventListener('keydown',e=>{if(e.target&&/INPUT/.test(e.target.tagName)&&e.target.closest&&e.target.closest('#wwCoopPanel'))e.stopPropagation();},true);
+})();
+
+</script><!-- /WrenchWorks co-op -->
+
 <!-- WrenchWorks phone mode (V37) -->
 <style id="wwPhoneCss">
 body.ww-phone #top{left:6px!important;right:6px!important;top:calc(4px + env(safe-area-inset-top,0px))!important;padding:3px 8px!important;gap:6px!important;display:flex!important;justify-content:space-between!important;align-items:center!important;min-height:0!important;height:auto!important}
